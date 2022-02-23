@@ -1,0 +1,2 @@
+/usr/bin/ar qc libbygo_matrix.a  
+/usr/bin/ranlib libbygo_matrix.a

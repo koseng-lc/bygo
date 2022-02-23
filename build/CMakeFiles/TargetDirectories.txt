@@ -1,0 +1,8 @@
+/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/rebuild_cache.dir
+/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/edit_cache.dir
+/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/bygo_shape.dir
+/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/bygo_elem.dir
+/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/bygo_lib.dir
+/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/bygo_helper.dir
+/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/bygo_matrix.dir
+/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/bygo_example.dir
