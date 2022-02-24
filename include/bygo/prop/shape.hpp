@@ -15,7 +15,6 @@ struct shape{
     using res_shape = shape<ds...>;
     static constexpr std::size_t dim{d};
     static constexpr std::size_t nelem{helper::nelem_v<d, ds...>};
-
 };
 
 template <std::size_t d>

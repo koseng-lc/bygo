@@ -4,8 +4,12 @@
 CMakeFiles/bygo_example.dir/main.cpp.o: ../include/bygo.hpp
 CMakeFiles/bygo_example.dir/main.cpp.o: ../include/bygo/basic.hpp
 CMakeFiles/bygo_example.dir/main.cpp.o: ../include/bygo/basic/basic_elem.hpp
+CMakeFiles/bygo_example.dir/main.cpp.o: ../include/bygo/basic/fill.hpp
 CMakeFiles/bygo_example.dir/main.cpp.o: ../include/bygo/basic/matrix.hpp
 CMakeFiles/bygo_example.dir/main.cpp.o: ../include/bygo/helper/helper.hpp
+CMakeFiles/bygo_example.dir/main.cpp.o: ../include/bygo/op.hpp
+CMakeFiles/bygo_example.dir/main.cpp.o: ../include/bygo/op/add.hpp
 CMakeFiles/bygo_example.dir/main.cpp.o: ../include/bygo/prop/shape.hpp
+CMakeFiles/bygo_example.dir/main.cpp.o: ../include/bygo/util/util.hpp
 CMakeFiles/bygo_example.dir/main.cpp.o: ../main.cpp
 

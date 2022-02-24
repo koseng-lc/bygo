@@ -9,11 +9,17 @@
 ../include/bygo.hpp
 bygo/basic.hpp
 -
+bygo/op.hpp
+-
 bygo/prop/shape.hpp
+-
+bygo/util/util.hpp
 -
 
 ../include/bygo/basic.hpp
 bygo/basic/basic_elem.hpp
+-
+bygo/basic/fill.hpp
 -
 bygo/basic/matrix.hpp
 -
@@ -23,7 +29,17 @@ array
 -
 bygo/prop/shape.hpp
 -
+bygo/op.hpp
+-
+bygo/util/util.hpp
+-
 bygo/helper/helper.hpp
+-
+
+../include/bygo/basic/fill.hpp
+bygo/prop/shape.hpp
+-
+bygo/util/util.hpp
 -
 
 ../include/bygo/basic/matrix.hpp
@@ -34,11 +50,23 @@ bygo/prop/shape.hpp
 
 ../include/bygo/helper/helper.hpp
 
+../include/bygo/op.hpp
+bygo/op/add.hpp
+-
+
+../include/bygo/op/add.hpp
+bygo/prop/shape.hpp
+-
+bygo/util/util.hpp
+-
+
 ../include/bygo/prop/shape.hpp
 tuple
 -
 bygo/helper/helper.hpp
 -
+
+../include/bygo/util/util.hpp
 
 /media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/main.cpp
 iostream

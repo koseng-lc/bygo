@@ -202,6 +202,9 @@ bygo_matrix_LIB_DEPENDS:STATIC=
 //Dependencies for target
 bygo_shape_LIB_DEPENDS:STATIC=
 
+//Dependencies for target
+bygo_wrapper_LIB_DEPENDS:STATIC=
+
 
 ########################
 # INTERNAL cache entries
