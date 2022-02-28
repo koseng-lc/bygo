@@ -19,8 +19,6 @@ bygo/util/util.hpp
 ../include/bygo/basic.hpp
 bygo/basic/basic_elem.hpp
 -
-bygo/basic/fill.hpp
--
 bygo/basic/matrix.hpp
 -
 
@@ -36,12 +34,6 @@ bygo/util/util.hpp
 bygo/helper/helper.hpp
 -
 
-../include/bygo/basic/fill.hpp
-bygo/prop/shape.hpp
--
-bygo/util/util.hpp
--
-
 ../include/bygo/basic/matrix.hpp
 bygo/basic/basic_elem.hpp
 -
@@ -53,8 +45,36 @@ bygo/prop/shape.hpp
 ../include/bygo/op.hpp
 bygo/op/add.hpp
 -
+bygo/op/subtract.hpp
+-
+bygo/op/fill.hpp
+-
 
 ../include/bygo/op/add.hpp
+bygo/op/apply.hpp
+-
+bygo/prop/shape.hpp
+-
+bygo/util/util.hpp
+-
+
+../include/bygo/op/apply.hpp
+bygo/util/util.hpp
+-
+bygo/helper/helper.hpp
+-
+
+../include/bygo/op/fill.hpp
+bygo/op/apply.hpp
+-
+bygo/prop/shape.hpp
+-
+bygo/util/util.hpp
+-
+
+../include/bygo/op/subtract.hpp
+bygo/op/apply.hpp
+-
 bygo/prop/shape.hpp
 -
 bygo/util/util.hpp

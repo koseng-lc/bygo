@@ -5,11 +5,13 @@ CMakeFiles/bygo_example.dir/main.cpp.o
  ../include/bygo.hpp
  ../include/bygo/basic.hpp
  ../include/bygo/basic/basic_elem.hpp
- ../include/bygo/basic/fill.hpp
  ../include/bygo/basic/matrix.hpp
  ../include/bygo/helper/helper.hpp
  ../include/bygo/op.hpp
  ../include/bygo/op/add.hpp
+ ../include/bygo/op/apply.hpp
+ ../include/bygo/op/fill.hpp
+ ../include/bygo/op/subtract.hpp
  ../include/bygo/prop/shape.hpp
  ../include/bygo/util/util.hpp
  /media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/main.cpp
