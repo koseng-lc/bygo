@@ -6,3 +6,6 @@
 /media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/bygo_helper.dir
 /media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/bygo_matrix.dir
 /media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/bygo_example.dir
+/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/tests/CMakeFiles/rebuild_cache.dir
+/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/tests/CMakeFiles/basic_elem.dir
+/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/tests/CMakeFiles/edit_cache.dir

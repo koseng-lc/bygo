@@ -47,6 +47,10 @@ bygo/op/add.hpp
 -
 bygo/op/subtract.hpp
 -
+bygo/op/mult.hpp
+-
+bygo/op/div.hpp
+-
 bygo/op/fill.hpp
 -
 
@@ -64,7 +68,23 @@ bygo/util/util.hpp
 bygo/helper/helper.hpp
 -
 
+../include/bygo/op/div.hpp
+bygo/op/apply.hpp
+-
+bygo/prop/shape.hpp
+-
+bygo/util/util.hpp
+-
+
 ../include/bygo/op/fill.hpp
+bygo/op/apply.hpp
+-
+bygo/prop/shape.hpp
+-
+bygo/util/util.hpp
+-
+
+../include/bygo/op/mult.hpp
 bygo/op/apply.hpp
 -
 bygo/prop/shape.hpp

@@ -631,3 +631,35 @@ make[1]: Leaving directory '/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-g
     Feature record: CXX_FEATURE:0cxx_variable_templates
     Feature record: CXX_FEATURE:0cxx_variadic_macros
     Feature record: CXX_FEATURE:0cxx_variadic_templates
+Determining if the include file pthread.h exists passed with the following output:
+Change Dir: /media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_7b13e/fast"
+make[1]: Entering directory '/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_7b13e.dir/build.make CMakeFiles/cmTC_7b13e.dir/build
+make[2]: Entering directory '/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7b13e.dir/CheckIncludeFile.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_7b13e.dir/CheckIncludeFile.c.o   -c /media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_7b13e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7b13e.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_7b13e.dir/CheckIncludeFile.c.o  -o cmTC_7b13e 
+make[2]: Leaving directory '/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function pthread_create exists in the pthread passed with the following output:
+Change Dir: /media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_64cee/fast"
+make[1]: Entering directory '/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_64cee.dir/build.make CMakeFiles/cmTC_64cee.dir/build
+make[2]: Entering directory '/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_64cee.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_64cee.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_64cee
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_64cee.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_64cee.dir/CheckFunctionExists.c.o  -o cmTC_64cee -lpthread 
+make[2]: Leaving directory '/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/media/koseng/4A7AE1C07AE1A941/lit/code/before-you-go/build/CMakeFiles/CMakeTmp'
+
+

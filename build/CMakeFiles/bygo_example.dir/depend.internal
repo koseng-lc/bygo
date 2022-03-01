@@ -10,7 +10,9 @@ CMakeFiles/bygo_example.dir/main.cpp.o
  ../include/bygo/op.hpp
  ../include/bygo/op/add.hpp
  ../include/bygo/op/apply.hpp
+ ../include/bygo/op/div.hpp
  ../include/bygo/op/fill.hpp
+ ../include/bygo/op/mult.hpp
  ../include/bygo/op/subtract.hpp
  ../include/bygo/prop/shape.hpp
  ../include/bygo/util/util.hpp

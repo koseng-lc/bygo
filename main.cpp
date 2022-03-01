@@ -101,15 +101,19 @@ int main(int argc, char** argv){
 
         std::cout << tensor_basic2_t::nelem << std::endl;
         auto res = t + t2;
-        bygo::fill(t, -1.);
+        bygo::op::fill(t, -1.);
         // res = t + t2;
         std::cout << "Result1: " << res[0][1][0][1] << std::endl;
         std::cout << "Result2: " << t[0][1][0][1] << std::endl;
     }
 
-    using matrix_t = bygo::matrix<double, bygo::shape<3,3>>;
+    using matrix_t = bygo::matrix<double, 3,2>;
     {
-        // matrix_t m;
+        // matrix_t m{{
+        //     {1,2},
+        //     {3,4},
+        //     {5,6}
+        // }};
     }
 
     return 0;

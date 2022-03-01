@@ -39,3 +39,5 @@ target_link_libraries(${PROJECT_NAME}
     bygo_shape
     bygo_elem
 )
+
+add_subdirectory(tests)

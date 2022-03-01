@@ -188,6 +188,19 @@ bygo_example/fast:
 	$(MAKE) -f CMakeFiles/bygo_example.dir/build.make CMakeFiles/bygo_example.dir/build
 .PHONY : bygo_example/fast
 
+#=============================================================================
+# Target rules for targets named basic_elem
+
+# Build rule for target.
+basic_elem: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 basic_elem
+.PHONY : basic_elem
+
+# fast build rule for target.
+basic_elem/fast:
+	$(MAKE) -f tests/CMakeFiles/basic_elem.dir/build.make tests/CMakeFiles/basic_elem.dir/build
+.PHONY : basic_elem/fast
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -229,6 +242,7 @@ help:
 	@echo "... bygo_helper"
 	@echo "... bygo_matrix"
 	@echo "... bygo_example"
+	@echo "... basic_elem"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

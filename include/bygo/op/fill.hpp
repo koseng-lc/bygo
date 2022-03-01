@@ -1,5 +1,5 @@
-#ifndef BYGO_OP_ADD_HPP
-#define BYGO_OP_ADD_HPP
+#ifndef BYGO_OP_FILL_HPP
+#define BYGO_OP_FILL_HPP
 
 #include <bygo/op/apply.hpp>
 #include <bygo/prop/shape.hpp>
@@ -8,17 +8,18 @@
 namespace bygo::op{
 
 namespace impl{
-    struct add{
+    struct fill{
         template <typename in_t, typename op_t>
         constexpr auto operator()(in_t&& in, op_t&& op) -> std::common_type_t<in_t, op_t>{
-            return in + op;
+            (void)in;
+            return op;
         }
     };
 }
 
-template <typename in_t, typename op_t, typename out_t>
-constexpr auto add(in_t&& in, op_t&& op, out_t&& out){
-    apply(impl::add(), in, op, out);
+template <typename in_t, typename op_t>
+constexpr auto fill(in_t&& in, op_t&& op){
+    apply(impl::fill(), in, op, in);
 }
 
 } // namespace bygo::op
