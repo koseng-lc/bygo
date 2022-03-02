@@ -1,7 +1,7 @@
 #ifndef BYGO_HELPER_HPP
 #define BYGO_HELPER_HPP
 
-namespace bygo::helper{
+namespace bygo::aux{
 
 /**
  *  @brief Using std::array 
@@ -68,6 +68,6 @@ struct is_scalar{
 template <typename T>
 static constexpr auto is_scalar_v = is_scalar<T>::value;
 
-} // namespace bygo::helper
+} // namespace bygo::aux
 
 #endif

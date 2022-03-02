@@ -3,7 +3,7 @@
 
 #include <tuple>
 
-#include <bygo/helper/helper.hpp>
+#include <bygo/aux/aux.hpp>
 
 namespace bygo{
 
@@ -14,7 +14,7 @@ struct shape{
     static constexpr std::size_t size{sizeof...(ds) + 1};
     using res_shape = shape<ds...>;
     static constexpr std::size_t dim{d};
-    static constexpr std::size_t nelem{helper::nelem_v<d, ds...>};
+    static constexpr std::size_t nelem{aux::nelem_v<d, ds...>};
 };
 
 template <std::size_t d>
@@ -22,10 +22,10 @@ struct shape<d>{
     static constexpr std::size_t size{1};
     using res_shape = shape<0>;
     static constexpr std::size_t dim{d};
-    static constexpr std::size_t nelem{helper::nelem_v<d>};
+    static constexpr std::size_t nelem{aux::nelem_v<d>};
 };
 
-namespace helper{
+namespace aux{
 
 /**
  *  @brief Check whether the shape is equal or not

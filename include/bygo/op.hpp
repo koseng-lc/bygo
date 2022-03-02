@@ -6,5 +6,6 @@
 #include <bygo/op/mult.hpp>
 #include <bygo/op/div.hpp>
 #include <bygo/op/fill.hpp>
+#include <bygo/op/transpose.hpp>
 
 #endif

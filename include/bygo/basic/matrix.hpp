@@ -6,16 +6,20 @@
 
 namespace bygo{
 
-template <typename scalar_t, std::size_t rows, std::size_t cols, typename _shape_t = shape<rows, cols>>
-class matrix: public basic_elem<scalar_t, _shape_t>{
+template <typename scalar_t, std::size_t rows, std::size_t cols, typename shape_t = shape<rows, cols>>
+class matrix: public basic_elem<scalar_t, shape_t>{
 public:
-    using shape_t = _shape_t;
+    using transpose_type = matrix<scalar_t, cols, rows>;
 
     static constexpr auto nrows{rows};
     static constexpr auto ncols{cols};
 
-    matrix(basic_elem<scalar_t, _shape_t> _data)
-        : basic_elem<scalar_t, _shape_t>(_data){
+    matrix(){
+
+    }
+
+    matrix(basic_elem<scalar_t, shape_t> _data)
+        : basic_elem<scalar_t, shape_t>(_data){
 
     }
 

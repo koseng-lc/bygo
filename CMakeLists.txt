@@ -22,10 +22,10 @@ add_library(bygo_elem
 )
 set_target_properties(bygo_elem PROPERTIES LINKER_LANGUAGE CXX)
 
-add_library(bygo_helper
-    include/bygo/helper/helper.hpp
+add_library(bygo_aux
+    include/bygo/aux/aux.hpp
 )
-set_target_properties(bygo_helper PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(bygo_aux PROPERTIES LINKER_LANGUAGE CXX)
 
 add_library(bygo_matrix
     include/bygo/basic/matrix.hpp

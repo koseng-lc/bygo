@@ -2,6 +2,16 @@
 
 #include <bygo.hpp>
 
+template <typename T>
+auto print_matrix(T t){
+    for(auto i(0); i < T::nrows; i++){
+        for(auto j(0); j < T::ncols; j++){
+            std::cout << t(i, j) << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
 int main(int argc, char** argv){
     
     // bygo::basic_elem<double, bygo::shape<3,2>> check{{1,2},{1,2},{1,2}};
@@ -118,8 +128,20 @@ int main(int argc, char** argv){
             {5,6}
         }});
 
+        m(0,1) = 99;
+        std::cout << "m(0,0): " << m(0,1) << std::endl;
         std::cout << "Matrix Cols. Size: " << matrix_t::ncols << std::endl;
         std::cout << "Matrix Rows. Size: " << matrix_t::nrows << std::endl;
+
+        print_matrix(m);
+
+        auto m_t(bygo::op::transpose(m));
+        auto m_t_cols(decltype(m_t)::ncols);
+        auto m_t_rows(decltype(m_t)::nrows);
+        std::cout << "Matrix_T Cols. Size: " << m_t_cols << std::endl;
+        std::cout << "Matrix_T Rows. Size: " << m_t_rows << std::endl;
+
+        print_matrix(m_t);
     }
 
     return 0;

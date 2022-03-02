@@ -1,2 +1,0 @@
-/usr/bin/ar qc libbygo_lib.a  
-/usr/bin/ranlib libbygo_lib.a

@@ -1,2 +1,0 @@
-/usr/bin/ar qc libbygo_shape.a  
-/usr/bin/ranlib libbygo_shape.a
