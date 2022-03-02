@@ -10,7 +10,7 @@ template <typename fn_t, typename in_t, typename op_t, typename out_t, typename 
 constexpr auto apply(fn_t&& fn, in_t&& in, op_t&& op, out_t&& out);
 
 namespace impl{
-    template <typename fn_t, typename in_t, typename op_t, typename out_t,typename shape_t, std::size_t... I>
+    template <typename fn_t, typename in_t, typename op_t, typename out_t, typename shape_t, std::size_t... I>
     constexpr auto apply_impl(fn_t&& fn, in_t&& in, op_t&& op, out_t&& out, std::index_sequence<I...>){
         // using fn_fwd_t = decltype(std::forward<de cltype(fn)>(fn));
         // using in_fwd_t = decltype(std::forward<decltype(in[I])>(in[I]));

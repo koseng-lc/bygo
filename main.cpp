@@ -92,12 +92,15 @@ int main(int argc, char** argv){
         }};
         
         // Set element-(0,1,0,1)
-        t(1,0,1,0) = 19;
-        t2(1,0,1,0) = 11;
+        // t(1,0,1,0) = 19;
+        t(0,1,0,1) = 19;
+        // t2(1,0,1,0) = 11;
         // Print element-(0,1,0,1)
-        std::cout << t[0][1][0][1] << std::endl;
+        std::cout << "t(0,1,0,1): " << t[0][1][0][1] << std::endl;
         // Print element-(0,1,0,1) in reverse order
-        std::cout << t(1,0,1,0) << std::endl;
+        // std::cout << t(1,0,1,0) << std::endl;
+        std::cout << "t(0,1,0,1): " << t(0,1,0,1) << std::endl;
+        // std::cout << "CHECK1: " << t.at(1,0,1,0) << std::endl;
 
         std::cout << tensor_basic2_t::nelem << std::endl;
         auto res = t + t2;
@@ -107,13 +110,16 @@ int main(int argc, char** argv){
         std::cout << "Result2: " << t[0][1][0][1] << std::endl;
     }
 
-    using matrix_t = bygo::matrix<double, 3,2>;
+    using matrix_t = bygo::matrix<double, 3, 2>;
     {
-        // matrix_t m{{
-        //     {1,2},
-        //     {3,4},
-        //     {5,6}
-        // }};
+        matrix_t m({{
+            {1,2},
+            {3,4},
+            {5,6}
+        }});
+
+        std::cout << "Matrix Cols. Size: " << matrix_t::ncols << std::endl;
+        std::cout << "Matrix Rows. Size: " << matrix_t::nrows << std::endl;
     }
 
     return 0;

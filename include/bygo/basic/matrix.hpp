@@ -14,12 +14,10 @@ public:
     static constexpr auto nrows{rows};
     static constexpr auto ncols{cols};
 
-    // matrix(basic_elem<scalar_t, _shape_t> _data)
-    //     : data_(_data){
+    matrix(basic_elem<scalar_t, _shape_t> _data)
+        : basic_elem<scalar_t, _shape_t>(_data){
 
-    // }
-
-
+    }
 
 };
 

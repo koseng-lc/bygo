@@ -27,32 +27,66 @@ public:
         return data_[i];
     }
 
-    template <typename _Ax, typename ..._Axs>
+    /**
+     *  @brief Element getter using parentheses
+     */ 
+public:
+    template <typename _Ax, typename ..._Axs, typename Is = std::make_index_sequence<sizeof...(_Axs)+1>>
     constexpr inline auto operator()(_Ax _ax, _Axs... _axs) const{
-        static_assert(sizeof...(_axs) + 1 <= shape_t::size, "[basic_elem] Num of axis is too much.");
-        return (*this)(_axs...)[_ax];
+        static_assert(sizeof...(_axs) + 1 <= shape_t::size, "[basic_elem] Number of axis is too much.");
+
+        return this->reverse_at(std::forward_as_tuple(_ax, _axs...), Is{});
     }
 
-    template <typename _Ax>
-    constexpr inline auto operator()(_Ax _ax) const{
-        return (*this)[_ax];
+private:
+    template <typename tup_t, std::size_t ...I>
+    constexpr inline auto reverse_at(tup_t _tup, std::index_sequence<I...>) const{
+        return this->at(std::get<(sizeof...(I)-1)-I>(_tup)...);
     }
 
     template <typename _Ax, typename ..._Axs>
-    constexpr inline auto& operator()(_Ax _ax, _Axs... _axs){
-        return (*this)(_axs...)[_ax];
+    constexpr inline auto at(_Ax _ax, _Axs... _axs) const{
+        return this->at(_axs...)[_ax];
     }
 
     template <typename _Ax>
-    constexpr inline auto& operator()(_Ax _ax){
+    constexpr inline auto at(_Ax _ax) const{
         return (*this)[_ax];
     }
 
+    /**
+     *  @brief Element setter using parentheses
+     */ 
+public:
+    template <typename _Ax, typename ..._Axs, typename Is = std::make_index_sequence<sizeof...(_Axs)+1>>
+    constexpr inline auto& operator()(_Ax _ax, _Axs... _axs){
+        static_assert(sizeof...(_axs) + 1 <= shape_t::size, "[basic_elem] Number of axis is too much.");
+
+        return this->reverse_at(std::forward_as_tuple(_ax, _axs...), Is{});
+    }
+
+private:
+    template <typename tup_t, std::size_t ...I>
+    constexpr inline auto& reverse_at(tup_t&& _tup, std::index_sequence<I...>){
+        return this->at(std::get<(sizeof...(I)-1)-I>(_tup)...);
+    }
+
+    template <typename _Ax, typename ..._Axs>
+    constexpr inline auto& at(_Ax _ax, _Axs... _axs){
+        return this->at(_axs...)[_ax];
+    }
+
+    template <typename _Ax>
+    constexpr inline auto& at(_Ax _ax){
+        return (*this)[_ax];
+    }
+    
+public:
     template <typename op_t>
-    constexpr auto operator+(op_t _op){
-        static_assert(helper::is_shape_equal_v<shape_type, typename op_t::shape_type>, "[basic_elem] Shape must be the same!");
+    constexpr auto operator+(op_t&& _op){
+        static_assert(helper::is_shape_equal_v<shape_type, typename util::remove_cvref_t<op_t>::shape_type>, "[basic_elem] Shape must be the same!");
         basic_elem<scalar_t, shape_t> res;
-        op::add((*this), _op, res);
+        op::add((*this), std::forward<op_t>(_op), res);
         return res;
     }
 
