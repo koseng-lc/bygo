@@ -14,11 +14,11 @@ public:
     static constexpr auto nrows{rows};
     static constexpr auto ncols{cols};
 
-    matrix(){
+    constexpr matrix(){
 
     }
 
-    matrix(basic_elem<scalar_t, shape_t> _data)
+    constexpr matrix(basic_elem<scalar_t, shape_t> _data)
         : basic_elem<scalar_t, shape_t>(_data){
 
     }

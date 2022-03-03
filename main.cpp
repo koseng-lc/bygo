@@ -122,26 +122,30 @@ int main(int argc, char** argv){
 
     using matrix_t = bygo::matrix<double, 3, 2>;
     {
-        matrix_t m({{
+        constexpr matrix_t m({{
             {1,2},
             {3,4},
             {5,6}
         }});
 
-        m(0,1) = 99;
+        // m(0,1) = 99;
         std::cout << "m(0,0): " << m(0,1) << std::endl;
         std::cout << "Matrix Cols. Size: " << matrix_t::ncols << std::endl;
         std::cout << "Matrix Rows. Size: " << matrix_t::nrows << std::endl;
 
         print_matrix(m);
 
-        auto m_t(bygo::op::transpose(m));
+        constexpr auto m_t(bygo::op::transpose(m));
         auto m_t_cols(decltype(m_t)::ncols);
         auto m_t_rows(decltype(m_t)::nrows);
         std::cout << "Matrix_T Cols. Size: " << m_t_cols << std::endl;
         std::cout << "Matrix_T Rows. Size: " << m_t_rows << std::endl;
 
         print_matrix(m_t);
+
+        constexpr auto m_sym(bygo::op::dot(m, m_t));
+        std::cout << "======" << std::endl;
+        print_matrix(m_sym);
     }
 
     return 0;

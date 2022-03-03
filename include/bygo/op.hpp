@@ -7,5 +7,6 @@
 #include <bygo/op/div.hpp>
 #include <bygo/op/fill.hpp>
 #include <bygo/op/transpose.hpp>
+#include <bygo/op/dot.hpp>
 
 #endif

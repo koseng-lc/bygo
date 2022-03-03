@@ -4,7 +4,7 @@
 #include <array>
 
 #include <bygo/prop/shape.hpp>
-#include <bygo/op.hpp>
+#include <bygo/op/add.hpp>
 #include <bygo/util/util.hpp>
 #include <bygo/aux/aux.hpp>
 
