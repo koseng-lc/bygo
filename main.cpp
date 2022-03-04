@@ -3,6 +3,11 @@
 #include <bygo.hpp>
 
 template <typename T>
+constexpr void test_helper(T&&){}
+
+#define IS_CONSTEXPR(...) noexcept(test_helper(__VA_ARGS__))
+
+template <typename T>
 auto print_matrix(T t){
     for(auto i(0); i < T::nrows; i++){
         for(auto j(0); j < T::ncols; j++){
@@ -135,6 +140,7 @@ int main(int argc, char** argv){
 
         print_matrix(m);
 
+        auto m2_t(bygo::op::transpose(m));
         constexpr auto m_t(bygo::op::transpose(m));
         auto m_t_cols(decltype(m_t)::ncols);
         auto m_t_rows(decltype(m_t)::nrows);
@@ -146,6 +152,15 @@ int main(int argc, char** argv){
         constexpr auto m_sym(bygo::op::dot(m, m_t));
         std::cout << "======" << std::endl;
         print_matrix(m_sym);
+
+        constexpr auto x = IS_CONSTEXPR(bygo::op::transpose(m_t));
+        constexpr auto y = IS_CONSTEXPR(bygo::op::transpose(m2_t));
+
+        std::cerr << "Compile-time: " << x << std::endl;
+        std::cerr << "Compile-time: " << y << std::endl;
+
+        constexpr auto m_inv(bygo::op::inv(m));
+        
     }
 
     return 0;

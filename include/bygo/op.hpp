@@ -8,5 +8,6 @@
 #include <bygo/op/fill.hpp>
 #include <bygo/op/transpose.hpp>
 #include <bygo/op/dot.hpp>
+#include <bygo/op/inv.hpp>
 
 #endif
