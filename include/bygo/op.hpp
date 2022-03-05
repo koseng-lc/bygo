@@ -9,5 +9,7 @@
 #include <bygo/op/transpose.hpp>
 #include <bygo/op/dot.hpp>
 #include <bygo/op/inv.hpp>
+#include <bygo/op/swap_elem.hpp>
+#include <bygo/op/assign.hpp>
 
 #endif

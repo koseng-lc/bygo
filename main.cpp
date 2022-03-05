@@ -133,6 +133,12 @@ int main(int argc, char** argv){
             {5,6}
         }});
 
+        matrix_t m2({{
+            {2,9},
+            {7,5},
+            {1,3}
+        }});
+
         // m(0,1) = 99;
         std::cout << "m(0,0): " << m(0,1) << std::endl;
         std::cout << "Matrix Cols. Size: " << matrix_t::ncols << std::endl;
@@ -159,7 +165,17 @@ int main(int argc, char** argv){
         std::cerr << "Compile-time: " << x << std::endl;
         std::cerr << "Compile-time: " << y << std::endl;
 
-        constexpr auto m_inv(bygo::op::inv(m));
+        // constexpr auto m_inv(bygo::op::inv(m));
+        auto m3(m);
+        // m3(0) = m2(1);
+        // auto m_swapped(bygo::op::swap_elem(m, std::make_tuple(0), std::make_tuple(1)));
+        auto m_inv(bygo::op::inv(m));
+        print_matrix(m2);
+        std::cout << "======" << std::endl;
+        auto m_assign(bygo::op::assign(m,m2,std::make_tuple(1)));
+        // auto m_assign(bygo::op::assign(m,m2));
+        print_matrix(m_assign);
+        // print_matrix(m_swapped);
         
     }
 

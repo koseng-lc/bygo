@@ -13,25 +13,41 @@ namespace impl{
     // }
 
     template <typename in_t, typename out_t>
-    constexpr auto find_nonzero_pos(in_t&& in, out_t&& out){
-        
-    }
+    constexpr void find_nonzero_pos(in_t&& in, out_t&& out, auto& index, auto& lead, const auto& row){
+        if(in[index][lead] == 0){
+            index += 1;
 
-    struct rref_sub1{
-        template <typename in_t, typename out_t, typename lead_t>
-        constexpr auto operator()(in_t&& in, out_t&& out, lead_t&& lead, std::size_t idx){
-            // std::cout << "WOYY" << std::endl;
-            in[idx];
-            out[idx];
             using out_type = util::remove_cvref_t<out_t>;
 
             constexpr auto nrows{out_type::nrows};
             constexpr auto ncols{out_type::ncols};
 
-            auto index(idx);
+            if(index > nrows){
+                index = row;
+                lead += 1;
+                if(lead > ncols){
+                    return;
+                }
+            }
+            find_nonzero_pos(std::forward<in_t>(in), std::forward<out_t>(out), index, lead, row);
+        }
+    }
+
+    struct rref_sub1{
+        template <typename in_t, typename out_t, typename lead_t>
+        constexpr auto operator()(in_t&& in, out_t&& out, lead_t&& lead, std::size_t row){
+            
+            using out_type = util::remove_cvref_t<out_t>;
+
+            constexpr auto nrows{out_type::nrows};
+            constexpr auto ncols{out_type::ncols};
+
+            auto index(row);
             if(lead > ncols){
                 return;
             }
+
+            find_nonzero_pos(std::forward<in_t>(in), std::forward<out_t>(out), index, lead, row);
         }
     };
 
