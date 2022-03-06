@@ -168,14 +168,15 @@ int main(int argc, char** argv){
         // constexpr auto m_inv(bygo::op::inv(m));
         auto m3(m);
         // m3(0) = m2(1);
-        // auto m_swapped(bygo::op::swap_elem(m, std::make_tuple(0), std::make_tuple(1)));
+        auto m_swapped(bygo::op::swap_elem(m, std::make_tuple(1), std::make_tuple(2)));
+        print_matrix(m_swapped);
+        std::cout << "======" << std::endl;
         auto m_inv(bygo::op::inv(m));
         print_matrix(m2);
         std::cout << "======" << std::endl;
-        auto m_assign(bygo::op::assign(m,m2,std::make_tuple(1)));
+        auto m_assign(bygo::op::assign(m, m2, std::make_tuple(1)));
         // auto m_assign(bygo::op::assign(m,m2));
         print_matrix(m_assign);
-        // print_matrix(m_swapped);
         
     }
 
