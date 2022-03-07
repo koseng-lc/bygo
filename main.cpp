@@ -7,15 +7,6 @@ constexpr void test_helper(T&&){}
 
 #define IS_CONSTEXPR(...) noexcept(test_helper(__VA_ARGS__))
 
-template <typename T>
-auto print_matrix(T t){
-    for(auto i(0); i < T::nrows; i++){
-        for(auto j(0); j < T::ncols; j++){
-            std::cout << t(i, j) << " ";
-        }
-        std::cout << std::endl;
-    }
-}
 
 int main(int argc, char** argv){
     
@@ -126,6 +117,7 @@ int main(int argc, char** argv){
     }
 
     using matrix_t = bygo::matrix<double, 3, 2>;
+    using matrix_rref_t = bygo::matrix<double, 3, 4>;
     {
         constexpr matrix_t m({{
             {1,2},
@@ -144,7 +136,7 @@ int main(int argc, char** argv){
         std::cout << "Matrix Cols. Size: " << matrix_t::ncols << std::endl;
         std::cout << "Matrix Rows. Size: " << matrix_t::nrows << std::endl;
 
-        print_matrix(m);
+        bygo::util::print_matrix(m);
 
         auto m2_t(bygo::op::transpose(m));
         constexpr auto m_t(bygo::op::transpose(m));
@@ -153,11 +145,11 @@ int main(int argc, char** argv){
         std::cout << "Matrix_T Cols. Size: " << m_t_cols << std::endl;
         std::cout << "Matrix_T Rows. Size: " << m_t_rows << std::endl;
 
-        print_matrix(m_t);
+        bygo::util::print_matrix(m_t);
 
         constexpr auto m_sym(bygo::op::dot(m, m_t));
         std::cout << "======" << std::endl;
-        print_matrix(m_sym);
+        bygo::util::print_matrix(m_sym);
 
         constexpr auto x = IS_CONSTEXPR(bygo::op::transpose(m_t));
         constexpr auto y = IS_CONSTEXPR(bygo::op::transpose(m2_t));
@@ -165,19 +157,32 @@ int main(int argc, char** argv){
         std::cerr << "Compile-time: " << x << std::endl;
         std::cerr << "Compile-time: " << y << std::endl;
 
+        std::cout << "======M2" << std::endl;
+        bygo::util::print_matrix(m2);
+
         // constexpr auto m_inv(bygo::op::inv(m));
         auto m3(m);
         // m3(0) = m2(1);
-        auto m_swapped(bygo::op::swap_elem(m, std::make_tuple(1), std::make_tuple(2)));
-        print_matrix(m_swapped);
-        std::cout << "======" << std::endl;
-        auto m_inv(bygo::op::inv(m));
-        print_matrix(m2);
-        std::cout << "======" << std::endl;
+
+        matrix_rref_t m_rref({{
+            {1,2,-1,-4},
+            {2,3,-1,-11},
+            {-2,0,-3,22}
+        }});
+
+        constexpr auto m_swapped(bygo::op::swap_elem(m, std::make_tuple(1), std::make_tuple(2)));
+        bygo::util::print_matrix(m_swapped);
+        auto m_add(bygo::op::add(m, m2, std::make_tuple(1), std::make_tuple(0)));
+        std::cout << "====== Add sub:" << std::endl;
+        bygo::util::print_matrix(m_add);
+        // auto m_inv(bygo::op::inv(m));
+        auto m_inv(bygo::op::inv(m_rref));
+        std::cout << "======M_inv" << std::endl;
+        bygo::util::print_matrix(m_inv);
         auto m_assign(bygo::op::assign(m, m2, std::make_tuple(1)));
         // auto m_assign(bygo::op::assign(m,m2));
-        print_matrix(m_assign);
-        
+        std::cout << "======Assign sub:" << std::endl;
+        bygo::util::print_matrix(m_assign);
     }
 
     return 0;

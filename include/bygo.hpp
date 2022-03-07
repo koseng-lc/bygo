@@ -4,6 +4,6 @@
 #include <bygo/basic.hpp>
 #include <bygo/op.hpp>
 #include <bygo/prop/shape.hpp>
-#include <bygo/util/util.hpp>
+#include <bygo/util.hpp>
 
 #endif

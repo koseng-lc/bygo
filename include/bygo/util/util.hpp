@@ -1,5 +1,5 @@
-#ifndef BYGO_UTIL_HPP
-#define BYGO_UTIL_HPP
+#ifndef BYGO_UTIL_UTIL_HPP
+#define BYGO_UTIL_UTIL_HPP
 
 namespace bygo::util{
 
