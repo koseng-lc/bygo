@@ -177,11 +177,11 @@ int main(int argc, char** argv){
         bygo::util::print_matrix(m_add);
         // auto m_inv(bygo::op::inv(m));
         auto m_inv(bygo::op::inv(m_rref));
-        std::cout << "======M_inv" << std::endl;
+        std::cout << "====== M_inv" << std::endl;
         bygo::util::print_matrix(m_inv);
         auto m_assign(bygo::op::assign(m, m2, std::make_tuple(1)));
         // auto m_assign(bygo::op::assign(m,m2));
-        std::cout << "======Assign sub:" << std::endl;
+        std::cout << "====== Assign sub:" << std::endl;
         bygo::util::print_matrix(m_assign);
     }
 

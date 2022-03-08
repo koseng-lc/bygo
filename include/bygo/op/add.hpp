@@ -58,7 +58,7 @@ constexpr auto add(in_t&& in, op_t&& op){
 
     out_type res(in);
 
-    apply(impl::_add(), in, op, res);
+    apply(impl::_add(), std::forward<in_t>(in), std::forward<op_t>(op), res);
 
     return res;
 }

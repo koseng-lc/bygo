@@ -58,7 +58,7 @@ constexpr auto mult(in_t&& in, op_t&& op){
 
     out_type res(in);
 
-    apply(impl::_mult(), in, op, res);
+    apply(impl::_mult(), std::forward<in_t>(in), std::forward<op_t>(op), res);
 
     return res;
 }
