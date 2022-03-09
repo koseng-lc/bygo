@@ -7,6 +7,11 @@ constexpr void test_helper(T&&){}
 
 #define IS_CONSTEXPR(...) noexcept(test_helper(__VA_ARGS__))
 
+template <std::size_t ...I>
+constexpr auto check(std::index_sequence<I...>){
+    (std::cout << I << " ", ...);
+    std::cout << std::endl;
+}
 
 int main(int argc, char** argv){
     

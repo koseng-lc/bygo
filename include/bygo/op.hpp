@@ -12,5 +12,6 @@
 #include <bygo/op/inv.hpp>
 #include <bygo/op/swap_elem.hpp>
 #include <bygo/op/assign.hpp>
+#include <bygo/op/insert.hpp>
 
 #endif

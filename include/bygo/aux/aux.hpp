@@ -67,22 +67,6 @@ struct is_scalar{
 template <typename T>
 static constexpr auto is_scalar_v = is_scalar<T>::value;
 
-/**
- *  @brief Get n-th shape
- */ 
-template <typename shape_t, std::size_t N>
-struct nth_shape{
-    using type = typename nth_shape<typename shape_t::res_shape, N-1>::type;
-};
-
-template <typename shape_t>
-struct nth_shape<shape_t, 1>{
-    using type = shape_t;
-};
-
-template <typename shape_t, std::size_t N>
-using nth_shape_t = typename nth_shape<shape_t, N>::type;
-
 } // namespace bygo::aux
 
 #endif
