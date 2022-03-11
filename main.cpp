@@ -78,7 +78,7 @@ int main(int argc, char** argv){
 
         tensor_basic3_t t3{{
             {
-                {1,2},{3,4},{5,6},{7,8}
+                {9,1},{3,4},{5,6},{7,8}
             },
             {
                 {3,4},{1,2},{7,8},{5,6}
@@ -106,9 +106,9 @@ int main(int argc, char** argv){
         // std::cout << "Result1: " << res[0][1][0][1] << std::endl;
         // std::cout << "Result2: " << t[0][1][0][1] << std::endl;
 
-        auto t_ins1(bygo::op::insert(t2, t3, std::make_tuple(1)));
+        auto t_ins1(bygo::op::insert<1, 0>(t2, t3));
         // auto t_ins1(bygo::op::insert(t2, t3, {{1}}));
-        // auto t_assign(bygo::op::assign(t2, t2, std::make_tuple(0), std::make_tuple(1)));
+        auto t_assign(bygo::op::assign(t2, t3, std::make_tuple(0)));
         bygo::util::print(t_ins1);
         // bygo::util::print(t_assign);
     }
@@ -185,7 +185,7 @@ int main(int argc, char** argv){
         vec_t v{{
             1,2
         }};
-        auto m_ins(bygo::op::insert(m, v, std::make_tuple(1)));
+        // auto m_ins(bygo::op::insert(m, v, std::make_tuple(1)));
 
         // check(bygo::aux::shape_dim_t<decltype(m_ins)::shape_type>{});
     }

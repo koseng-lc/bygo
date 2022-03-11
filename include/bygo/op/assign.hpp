@@ -18,12 +18,25 @@ namespace impl{
     template <typename in_t, typename op_t, typename out_t, typename axes1_t, typename axes2_t, std::size_t ...I>
     constexpr auto assign(in_t&& in, op_t&& op, out_t&& out, axes1_t axes1, axes2_t axes2, std::index_sequence<I...>){
         auto& out_part(out(std::get<I>(axes1)...));
+        
         ::bygo::op::apply<decltype(_assign()),
             decltype(in(std::get<I>(axes1)...)),
             decltype(op(std::get<I>(axes2)...)),
             decltype(out(std::get<I>(axes1)...)),
             aux::nth_shape_t<typename util::remove_cvref_t<out_t>::shape_type, sizeof...(I)+1>>
         (_assign(), in(std::get<I>(axes1)...), op(std::get<I>(axes2)...), out_part);
+    }
+
+    template <typename in_t, typename op_t, typename out_t, typename axes_t, std::size_t ...I>
+    constexpr auto assign(in_t&& in, op_t&& op, out_t&& out, axes_t axes, std::index_sequence<I...>){
+        auto& out_part(out(std::get<I>(axes)...));
+
+        ::bygo::op::apply<decltype(_assign()),
+            decltype(in(std::get<I>(axes)...)),
+            decltype(std::forward<op_t>(op)),
+            decltype(out(std::get<I>(axes)...)),
+            aux::nth_shape_t<typename util::remove_cvref_t<out_t>::shape_type, sizeof...(I)+1>>
+        (_assign(), in(std::get<I>(axes)...), std::forward<op_t>(op), out_part);
     }
 
     template <typename in_t, typename op_t, typename out_t>
@@ -44,8 +57,22 @@ constexpr auto assign(in_t&& in, op_t&& op, std::tuple<axes1_t...> axes1, std::t
 
 template <typename in_t, typename op_t, typename ...axes_t, typename Is = std::make_index_sequence<sizeof...(axes_t)>>
 constexpr auto assign(in_t&& in, op_t&& op, std::tuple<axes_t...> axes){
+    using in_type = util::remove_cvref_t<in_t>;
+    using op_type = util::remove_cvref_t<op_t>;
+    
+    // static_assert(aux::is_shape_equal_v<sub_shape, typename op_type::shape_type>, "Shape is equal!");
+    if constexpr(aux::is_shape_equal_v<typename in_type::shape_type, typename op_type::shape_type>){
+        return assign(std::forward<in_t>(in), std::forward<op_t>(op), axes, axes);
+    }else{
+        using sub_shape = aux::nth_shape_t<typename in_type::shape_type, sizeof...(axes_t)>;
+        using out_type = util::remove_cvref_t<in_t>;
 
-    return assign(std::forward<in_t>(in), std::forward<op_t>(op), axes, axes);
+        out_type res(in);
+        impl::assign(std::forward<in_t>(in), std::forward<op_t>(op), res, axes, Is{});
+
+        return res;
+    }
+    
 }
 
 template <typename in_t, typename op_t>
