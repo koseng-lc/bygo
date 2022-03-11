@@ -44,12 +44,8 @@ constexpr auto assign(in_t&& in, op_t&& op, std::tuple<axes1_t...> axes1, std::t
 
 template <typename in_t, typename op_t, typename ...axes_t, typename Is = std::make_index_sequence<sizeof...(axes_t)>>
 constexpr auto assign(in_t&& in, op_t&& op, std::tuple<axes_t...> axes){
-    using out_type = util::remove_cvref_t<in_t>;
 
-    out_type res(in);
-    impl::assign(std::forward<in_t>(in), std::forward<op_t>(op), res, axes, axes, Is{});
-
-    return res;
+    return assign(std::forward<in_t>(in), std::forward<op_t>(op), axes, axes);
 }
 
 template <typename in_t, typename op_t>

@@ -106,11 +106,6 @@ namespace impl{
     constexpr auto set_nth_shape(std::index_sequence<I...>, std::index_sequence<J...>){
         return shape<(I * (std::size_t)(J != N) + (std::size_t)(J == N) * V)...>{};
     }
-
-    template <std::size_t N, std::size_t V, std::size_t ...I, std::size_t ...J>
-    constexpr auto add_nth_shape(std::index_sequence<I...>, std::index_sequence<J...>){
-        return shape<(I + (std::size_t)(J == N) * V)...>{};
-    }
 }
 
 template <std::size_t N, std::size_t V, typename shape_t>
@@ -123,6 +118,20 @@ public:
 };
 
 template <std::size_t N, std::size_t V, typename shape_t>
+using set_nth_shape_t = typename set_nth_shape<N, V, shape_t>::type;
+
+/**
+ *  @brief Add n-th shape
+ */
+
+namespace impl{
+    template <std::size_t N, std::size_t V, std::size_t ...I, std::size_t ...J>
+    constexpr auto add_nth_shape(std::index_sequence<I...>, std::index_sequence<J...>){
+        return shape<(I + (std::size_t)(J == N) * V)...>{};
+    }
+}
+
+template <std::size_t N, std::size_t V, typename shape_t>
 struct add_nth_shape{
 private:
     using Is = shape_dim_t<shape_t>;
@@ -130,9 +139,6 @@ private:
 public:
     using type = decltype(impl::add_nth_shape<N, V>(Is{}, Js{}));
 };
-
-template <std::size_t N, std::size_t V, typename shape_t>
-using set_nth_shape_t = typename set_nth_shape<N, V, shape_t>::type;
 
 template <std::size_t N, std::size_t V, typename shape_t>
 using add_nth_shape_t = typename add_nth_shape<N, V, shape_t>::type;

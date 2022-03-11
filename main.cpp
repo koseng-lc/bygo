@@ -14,22 +14,12 @@ constexpr auto check(std::index_sequence<I...>){
 }
 
 int main(int argc, char** argv){
-    
-    // bygo::basic_elem<double, bygo::shape<3,2>> check{{1,2},{1,2},{1,2}};
 
     using tensor_stl_t = bygo::basic_elem<double, bygo::shape<3,2,4,2>, true>;
     using tensor2_t = bygo::basic_elem<double, bygo::shape<3,2,3>>;
-    using tensor_basic_t = bygo::basic_elem<double, bygo::shape<3,2>>;
     using tensor_basic2_t = bygo::basic_elem<double, bygo::shape<3,2,4,2>>;
-
-    using shape_t = bygo::shape<3,4,5>;
-
-    // std::cout << shape_t::dim << std::endl;
-    // std::cout << shape_t::size << std::endl;
-    // std::cout << shape_t::res_shape::dim << std::endl;
-    // std::cout << shape_t::res_shape::size << std::endl;
-    // std::cout << shape_t::res_shape::res_shape::dim << std::endl;
-    // std::cout << shape_t::res_shape::res_shape::size << std::endl;
+    using tensor_basic3_t = bygo::basic_elem<double, bygo::shape<2,4,2>>;
+    using tensor_basic4_t = bygo::basic_elem<double, bygo::shape<4,2>>;
 
     {
         // tensor_stl_t t{{{
@@ -53,22 +43,6 @@ int main(int argc, char** argv){
         // // Print element-(1,0,1,0) in reverse order
         // std::cout << t(0,1,0,1) << std::endl;
         // std::cout << tensor_stl_t::nelem << std::endl;
-    }
-
-    {
-        // tensor_basic_t t{{
-        //     {1,2},
-        //     {3,4},
-        //     {5,6},
-        // }};
-        // t(1, 2) = 9;
-        // // in normal order
-        // std::cout << t[2][1] << std::endl;
-        // std::cout << t[1] << std::endl;
-        // // in reverse order
-        // std::cout << t(1,2) << std::endl;
-
-        // std::cout << tensor_basic_t::nelem << std::endl;
     }
 
     {
@@ -101,6 +75,22 @@ int main(int argc, char** argv){
                 {{3,4},{1,2},{5,6},{7,8}}
             }
         }};
+
+        tensor_basic3_t t3{{
+            {
+                {1,2},{3,4},{5,6},{7,8}
+            },
+            {
+                {3,4},{1,2},{7,8},{5,6}
+            }
+        }};
+
+        tensor_basic4_t t4{{
+            {1,2},
+            {3,4},
+            {5,6},
+            {7,8}
+        }};
         
         // Set element-(0,1,0,1)
         // t(1,0,1,0) = 19;
@@ -108,21 +98,24 @@ int main(int argc, char** argv){
         // t2(1,0,1,0) = 11;
         // Print element-(0,1,0,1)
         std::cout << "t(0,1,0,1): " << t[0][1][0][1] << std::endl;
-        // Print element-(0,1,0,1) in reverse order
-        // std::cout << t(1,0,1,0) << std::endl;
         std::cout << "t(0,1,0,1): " << t(0,1,0,1) << std::endl;
-        // std::cout << "CHECK1: " << t.at(1,0,1,0) << std::endl;
 
-        std::cout << tensor_basic2_t::nelem << std::endl;
-        auto res = t + t2;
+        // std::cout << tensor_basic2_t::nelem << std::endl;
+        // auto res = t + t2;
         bygo::op::fill(t, -1.);
-        // res = t + t2;
-        std::cout << "Result1: " << res[0][1][0][1] << std::endl;
-        std::cout << "Result2: " << t[0][1][0][1] << std::endl;
+        // std::cout << "Result1: " << res[0][1][0][1] << std::endl;
+        // std::cout << "Result2: " << t[0][1][0][1] << std::endl;
+
+        auto t_ins1(bygo::op::insert(t2, t3, std::make_tuple(1)));
+        // auto t_ins1(bygo::op::insert(t2, t3, {{1}}));
+        // auto t_assign(bygo::op::assign(t2, t2, std::make_tuple(0), std::make_tuple(1)));
+        bygo::util::print(t_ins1);
+        // bygo::util::print(t_assign);
     }
 
     using matrix_t = bygo::matrix<double, 3, 2>;
     using matrix_rref_t = bygo::matrix<double, 3, 4>;
+    using vec_t = bygo::basic_elem<double, bygo::shape<2>>;
     {
         constexpr matrix_t m({{
             {1,2},
@@ -176,18 +169,25 @@ int main(int argc, char** argv){
         }});
 
         constexpr auto m_swapped(bygo::op::swap_elem(m, std::make_tuple(1), std::make_tuple(2)));
-        bygo::util::print_matrix(m_swapped);
+        // bygo::util::print_matrix(m_swapped);
         auto m_add(bygo::op::add(m, m2, std::make_tuple(1), std::make_tuple(0)));
-        std::cout << "====== Add sub:" << std::endl;
-        bygo::util::print_matrix(m_add);
+        // std::cout << "====== Add sub:" << std::endl;
+        // bygo::util::print_matrix(m_add);
         // auto m_inv(bygo::op::inv(m));
         auto m_inv(bygo::op::inv(m_rref));
-        std::cout << "====== M_inv" << std::endl;
-        bygo::util::print_matrix(m_inv);
+        // std::cout << "====== M_inv" << std::endl;
+        // bygo::util::print_matrix(m_inv);
         auto m_assign(bygo::op::assign(m, m2, std::make_tuple(1)));
         // auto m_assign(bygo::op::assign(m,m2));
-        std::cout << "====== Assign sub:" << std::endl;
-        bygo::util::print_matrix(m_assign);
+        // std::cout << "====== Assign sub:" << std::endl;
+        // bygo::util::print_matrix(m_assign);
+
+        vec_t v{{
+            1,2
+        }};
+        auto m_ins(bygo::op::insert(m, v, std::make_tuple(1)));
+
+        // check(bygo::aux::shape_dim_t<decltype(m_ins)::shape_type>{});
     }
 
     return 0;
