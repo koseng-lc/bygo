@@ -11,9 +11,12 @@ namespace bygo::op{
 
 namespace impl{
 
+    /**
+     *  @brief Shift the input index after targeted index
+     */ 
     template <typename tup_t, std::size_t ...I>
     constexpr auto _after_idx(tup_t&& tup, std::index_sequence<I...>){
-        return std::make_tuple((std::get<I>(tup) - (std::size_t)(I == (sizeof...(I)-1)*(-1)))...);
+        return std::make_tuple((std::get<I>(tup) - (std::size_t)(I == (sizeof...(I)-1)))...);
     }
 
     template <typename ...Ts>
