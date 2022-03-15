@@ -13,5 +13,6 @@
 #include <bygo/op/swap_elem.hpp>
 #include <bygo/op/assign.hpp>
 #include <bygo/op/insert.hpp>
+#include <bygo/op/stack.hpp>
 
 #endif

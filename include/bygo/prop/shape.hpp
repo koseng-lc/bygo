@@ -143,6 +143,24 @@ public:
 template <std::size_t N, std::size_t V, typename shape_t>
 using add_nth_shape_t = typename add_nth_shape<N, V, shape_t>::type;
 
+/**
+ *  @brief Insert axis
+ */
+
+template <auto N, std::size_t V, typename shape_t, std::size_t ...D>
+struct insert_axis{
+    static constexpr auto put_here{((shape_t::size-1) == N) & (V != -1)};
+    using type = typename insert_axis<(put_here ? -1 : V), V, std::conditional_t<put_here, shape_t, typename shape_t::res_shape>, D..., (put_here ? V : shape_t::dim)>::type;
+};
+
+template <auto N, std::size_t V, std::size_t ...D>
+struct insert_axis<N, V, shape<0>, D...>{
+    using type = shape<D...>;
+};
+
+template <auto N, std::size_t V, typename shape_t>
+using insert_axis_t = typename insert_axis<N, V, shape_t>::type;
+
 }
 
 }

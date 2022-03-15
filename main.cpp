@@ -111,6 +111,10 @@ int main(int argc, char** argv){
         auto t_assign(bygo::op::assign(t2, t3, std::make_tuple(0)));
         bygo::util::print(t_ins1);
         // bygo::util::print(t_assign);
+
+        auto t_stack(bygo::op::stack<1>(t, t2));
+        // check(std::make_index_sequence<decltype(t_stack)>{});
+        check(bygo::aux::shape_dim_t<decltype(t_stack)::shape_type>{});
     }
 
     using matrix_t = bygo::matrix<double, 3, 2>;

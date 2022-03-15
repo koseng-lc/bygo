@@ -42,7 +42,7 @@ namespace impl{
         }
     }
 
-    template <typename shape_t, std::size_t index, std::size_t axis, typename in_t, typename op_t, typename out_t, std::size_t ...I>
+    template <std::size_t index, std::size_t axis, typename shape_t, typename in_t, typename op_t, typename out_t, std::size_t ...I>
     constexpr auto insert(in_t&& in, op_t&& op, out_t&& out, std::index_sequence<I...>){
         using res_shape = typename shape_t::res_shape;
         using Is = std::make_index_sequence<res_shape::dim>;
@@ -63,7 +63,7 @@ constexpr auto insert(in_t&& in, op_t&& op){
     // static_assert(aux::is_shape_equal_v<res_shape, op_shape>, "[insert] The target shape is not compatible.");
 
     out_type res;
-    impl::insert<out_shape, index, axis>(std::forward<in_t>(in), std::forward<op_t>(op), res, std::make_index_sequence<out_shape::dim>{});
+    impl::insert<index, axis, out_shape>(std::forward<in_t>(in), std::forward<op_t>(op), res, std::make_index_sequence<out_shape::dim>{});
 
     return res;
 }
