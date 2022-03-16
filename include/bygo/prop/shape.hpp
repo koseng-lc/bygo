@@ -161,6 +161,50 @@ struct insert_axis<N, V, shape<0>, D...>{
 template <auto N, std::size_t V, typename shape_t>
 using insert_axis_t = typename insert_axis<N, V, shape_t>::type;
 
+/**
+ *  @brief Count the number of elements to the given axes
+ */
+template <std::size_t N, typename shape_t>
+struct nth_nelem{
+    static constexpr auto value = nth_shape_dim_v<shape_t, N> * nth_nelem<N-1, shape_t>::value;
+};
+
+template <typename shape_t>
+struct nth_nelem<1, shape_t>{
+    static constexpr auto value = nth_shape_dim_v<shape_t, 1>;
+};
+
+template <typename shape_t>
+struct nth_nelem<0, shape_t>{
+    static constexpr auto value = 1;
+};
+
+template <std::size_t N, typename shape_t>
+static constexpr auto nth_nelem_v = nth_nelem<N, shape_t>::value;
+
+/**
+ *  @brief Access multi-dimensional array in single index fashion
+ */
+namespace impl{
+    template <typename shape_t, std::size_t S, std::size_t Ax, std::size_t ...Axs>
+    struct to_single{
+        static constexpr auto value = Ax * nth_nelem_v<S - sizeof...(Axs) - 1, shape_t> + ::bygo::aux::impl::to_single<shape_t, S, Axs...>::value;
+    };
+
+    template <typename shape_t, std::size_t S, std::size_t Ax>
+    struct to_single<shape_t, S, Ax>{
+        static constexpr auto value = Ax * nth_nelem_v<S - 1, shape_t>;
+    };
+}
+
+template <typename shape_t, std::size_t Ax, std::size_t ...Axs>
+struct to_single{
+    static constexpr auto value = impl::to_single<shape_t, shape_t::size, Ax, Axs...>::value;
+};
+
+template <typename shape_t, std::size_t Ax, std::size_t ...Axs>
+static constexpr auto to_single_v = to_single<shape_t, Ax, Axs...>::value;
+
 }
 
 }

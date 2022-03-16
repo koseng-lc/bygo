@@ -115,6 +115,9 @@ int main(int argc, char** argv){
         auto t_stack(bygo::op::stack<1>(t, t2));
         // check(std::make_index_sequence<decltype(t_stack)>{});
         check(bygo::aux::shape_dim_t<decltype(t_stack)::shape_type>{});
+        // std::cout << "to single: " << bygo::aux::to_single<bygo::shape<1,2,3,4>>(std::make_tuple(0)) << std::endl;
+        std::cout << "to single: " << bygo::aux::to_single_v<bygo::shape<1,2,3,4>, 0,1,2,3> << std::endl;
+        // std::cout << "nth-nelem: " << bygo::aux::nth_nelem_v<3, bygo::shape<1,2,3,4>> << std::endl;
     }
 
     using matrix_t = bygo::matrix<double, 3, 2>;
