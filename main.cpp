@@ -94,11 +94,11 @@ int main(int argc, char** argv){
         
         // Set element-(0,1,0,1)
         // t(1,0,1,0) = 19;
-        t(0,1,0,1) = 19;
+        t(2,1,3,1) = 19;
         // t2(1,0,1,0) = 11;
         // Print element-(0,1,0,1)
-        std::cout << "t(0,1,0,1): " << t[0][1][0][1] << std::endl;
-        std::cout << "t(0,1,0,1): " << t(0,1,0,1) << std::endl;
+        std::cout << "t(2,1,3,1): " << t[2][1][3][1] << std::endl;
+        std::cout << "t(2,1,3,1): " << t(2,1,3,1) << std::endl;
 
         // std::cout << tensor_basic2_t::nelem << std::endl;
         // auto res = t + t2;
@@ -113,11 +113,10 @@ int main(int argc, char** argv){
         // bygo::util::print(t_assign);
 
         auto t_stack(bygo::op::stack<1>(t, t2));
-        // check(std::make_index_sequence<decltype(t_stack)>{});
+
         check(bygo::aux::shape_dim_t<decltype(t_stack)::shape_type>{});
-        // std::cout << "to single: " << bygo::aux::to_single<bygo::shape<1,2,3,4>>(std::make_tuple(0)) << std::endl;
-        std::cout << "to single: " << bygo::aux::to_single_v<bygo::shape<1,2,3,4>, 0,1,2,3> << std::endl;
-        // std::cout << "nth-nelem: " << bygo::aux::nth_nelem_v<3, bygo::shape<1,2,3,4>> << std::endl;
+        std::cout << "to single: " << bygo::aux::to_single_v<bygo::shape<5,2,3,4>, 2,1,1,3> << std::endl;
+        check(bygo::aux::to_multi_t<bygo::shape<5,2,3,4>, 107>{});
     }
 
     using matrix_t = bygo::matrix<double, 3, 2>;
