@@ -147,16 +147,25 @@ using add_nth_shape_t = typename add_nth_shape<N, V, shape_t>::type;
  *  @brief Insert axis
  */
 
-template <auto N, std::size_t V, typename shape_t, std::size_t ...D>
+namespace impl{
+   template <auto N, std::size_t V, std::size_t I, typename shape_t, std::size_t ...D>
+    struct insert_axis{
+        static constexpr auto put_here{(I == N) & (V != -1)};
+        using type = typename insert_axis<N, (put_here ? -1 : V), I+1, std::conditional_t<put_here, shape_t, typename shape_t::res_shape>, D..., (put_here ? V : shape_t::dim)>::type;
+    };
+
+    template <auto N, std::size_t V, std::size_t I, std::size_t ...D>
+    struct insert_axis<N, V, I, shape<0>, D...>{
+        using type = shape<D...>;
+    };
+}
+
+template <auto N, std::size_t V, typename shape_t>
 struct insert_axis{
-    static constexpr auto put_here{((shape_t::size-1) == N) & (V != -1)};
-    using type = typename insert_axis<(put_here ? -1 : V), V, std::conditional_t<put_here, shape_t, typename shape_t::res_shape>, D..., (put_here ? V : shape_t::dim)>::type;
+    using type = typename impl::insert_axis<N, V, 0, shape_t>::type;
 };
 
-template <auto N, std::size_t V, std::size_t ...D>
-struct insert_axis<N, V, shape<0>, D...>{
-    using type = shape<D...>;
-};
+
 
 template <auto N, std::size_t V, typename shape_t>
 using insert_axis_t = typename insert_axis<N, V, shape_t>::type;
@@ -183,25 +192,52 @@ template <std::size_t N, typename shape_t>
 static constexpr auto nth_nelem_v = nth_nelem<N, shape_t>::value;
 
 /**
+ *  @brief Count the number of elements to the given axes in reverse order
+ */
+namespace impl{
+    template <std::size_t N, typename shape_t, std::size_t I>
+    struct nth_nelem_rev{
+        static constexpr auto value = nth_shape_dim_v<shape_t, shape_t::size-N> * nth_nelem_rev<N+1, shape_t, I-1>::value;
+    };
+
+    template <std::size_t N, typename shape_t>
+    struct nth_nelem_rev<N, shape_t, 1>{
+        static constexpr auto value = nth_shape_dim_v<shape_t, shape_t::size-N>;
+    };
+
+    template <std::size_t N, typename shape_t>
+    struct nth_nelem_rev<N, shape_t, 0>{
+        static constexpr auto value = 1;
+    };
+}
+
+template <std::size_t N, typename shape_t>
+struct nth_nelem_rev{
+    static constexpr auto value = impl::nth_nelem_rev<0, shape_t, N>::value;
+};
+
+template <std::size_t N, typename shape_t>
+static constexpr auto nth_nelem_rev_v = nth_nelem_rev<N, shape_t>::value;
+
+/**
  *  @brief Access multi-dimensional array in single index fashion
  */
 namespace impl{
-    template <typename shape_t, std::size_t S, std::size_t D, std::size_t Ax, std::size_t ...Axs>
+    template <typename shape_t, std::size_t S, std::size_t Ax, std::size_t ...Axs>
     struct to_single{
-        // static constexpr auto value = Ax * nth_nelem_v<S - sizeof...(Axs) - 1, shape_t> + ::bygo::aux::impl::to_single<shape_t, S, Axs...>::value;
-        static constexpr auto value = Ax * nth_nelem_v<D, shape_t> + ::bygo::aux::impl::to_single<shape_t, S, D+1, Axs...>::value;
+        static constexpr auto value = Ax * nth_nelem_rev_v<S, shape_t> + to_single<shape_t, S-1, Axs...>::value;
     };
 
-    template <typename shape_t, std::size_t S, std::size_t D, std::size_t Ax>
-    struct to_single<shape_t, S, D, Ax>{
-        // static constexpr auto value = Ax * nth_nelem_v<S - 1, shape_t>;
-        static constexpr auto value = Ax * nth_nelem_v<D, shape_t>;
+    template <typename shape_t, std::size_t S, std::size_t Ax>
+    struct to_single<shape_t, S, Ax>{
+        static constexpr auto value = Ax * nth_nelem_rev_v<S, shape_t>;
     };
 }
 
 template <typename shape_t, std::size_t Ax, std::size_t ...Axs>
 struct to_single{
-    static constexpr auto value = impl::to_single<shape_t, shape_t::size, 0, Ax, Axs...>::value;
+    // static constexpr auto value = impl::to_single<shape_t, shape_t::size-1, Ax, Axs...>::value;
+    static constexpr auto value = impl::to_single<shape_t, sizeof...(Axs), Ax, Axs...>::value;
 };
 
 template <typename shape_t, std::size_t Ax, std::size_t ...Axs>
@@ -213,7 +249,7 @@ static constexpr auto to_single_v = to_single<shape_t, Ax, Axs...>::value;
 namespace impl{
     template <typename shape_t, typename terminate_t, std::size_t I, std::size_t ...Ds>
     struct to_multi{
-        using type = typename to_multi<shape_t, typename terminate_t::res_shape, I, Ds..., ((I - to_single_v<shape_t, Ds...>)/(nth_nelem_v<sizeof...(Ds), shape_t>)) % nth_shape_dim_v<shape_t, sizeof...(Ds)+1>>::type;
+        using type = typename to_multi<shape_t, typename terminate_t::res_shape, I, ((I - to_single_v<shape_t, Ds...>)/(nth_nelem_rev_v<sizeof...(Ds), shape_t>)) % nth_shape_dim_v<shape_t, shape_t::size-sizeof...(Ds)>, Ds...>::type;
     };
 
     template <typename shape_t, std::size_t I, std::size_t ...Ds>
@@ -224,11 +260,16 @@ namespace impl{
 
 template <typename shape_t, std::size_t I>
 struct to_multi{
-    using type = typename impl::to_multi<shape_t, typename shape_t::res_shape, I, I % shape_t::dim>::type;
+    using type = typename impl::to_multi<shape_t, typename shape_t::res_shape, I, I % nth_shape_dim_v<shape_t, shape_t::size>>::type;
 };
 
 template <typename shape_t, std::size_t I>
 using to_multi_t = typename to_multi<shape_t, I>::type;
+
+template <typename shape_t, typename idx_t>
+constexpr auto to_multi_arg(idx_t&& idx){
+    return to_multi_t<shape_t, idx_t::value>{};
+}
 
 }
 

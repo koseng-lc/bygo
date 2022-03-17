@@ -1,4 +1,6 @@
 #include <iostream>
+#include <memory>
+#include <cxxabi.h>
 
 #include <bygo.hpp>
 
@@ -11,6 +13,41 @@ template <std::size_t ...I>
 constexpr auto check(std::index_sequence<I...>){
     (std::cout << I << " ", ...);
     std::cout << std::endl;
+}
+
+template <typename in_t, std::size_t ...I>
+constexpr auto check2(in_t in, std::index_sequence<I...>){
+    // (std::cout << I << " ", ...);
+    // std::cout << std::endl;
+    // ((in.operator()<I>() = 1), ...);
+    // in(std::integral_constant<std::size_t, I>{}) = 1;
+}
+
+template <class T>
+std::string
+type_name()
+{
+    typedef typename std::remove_reference<T>::type TR;
+    std::unique_ptr<char, void(*)(void*)> own
+           (
+#ifndef _MSC_VER
+                abi::__cxa_demangle(typeid(TR).name(), nullptr,
+                                           nullptr, nullptr),
+#else
+                nullptr,
+#endif
+                std::free
+           );
+    std::string r = own != nullptr ? own.get() : typeid(TR).name();
+    if (std::is_const<TR>::value)
+        r += " const";
+    if (std::is_volatile<TR>::value)
+        r += " volatile";
+    if (std::is_lvalue_reference<T>::value)
+        r += "&";
+    else if (std::is_rvalue_reference<T>::value)
+        r += "&&";
+    return r;
 }
 
 int main(int argc, char** argv){
@@ -102,7 +139,7 @@ int main(int argc, char** argv){
 
         // std::cout << tensor_basic2_t::nelem << std::endl;
         // auto res = t + t2;
-        bygo::op::fill(t, -1.);
+        // bygo::op::fill(t, -1.);
         // std::cout << "Result1: " << res[0][1][0][1] << std::endl;
         // std::cout << "Result2: " << t[0][1][0][1] << std::endl;
 
@@ -113,10 +150,8 @@ int main(int argc, char** argv){
         // bygo::util::print(t_assign);
 
         auto t_stack(bygo::op::stack<1>(t, t2));
-
-        check(bygo::aux::shape_dim_t<decltype(t_stack)::shape_type>{});
-        std::cout << "to single: " << bygo::aux::to_single_v<bygo::shape<5,2,3,4>, 2,1,1,3> << std::endl;
-        check(bygo::aux::to_multi_t<bygo::shape<5,2,3,4>, 107>{});
+        std::cout << "Stack:" << std::endl;
+        bygo::util::print(t_stack);
     }
 
     using matrix_t = bygo::matrix<double, 3, 2>;

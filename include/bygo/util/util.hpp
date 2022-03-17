@@ -55,6 +55,22 @@ namespace bygo::util{
             return val2;
         }
     }
+
+    /**
+     *  @brief Determine whether a type is integer_constant or not
+     */
+    template <typename T>
+    struct is_integral_constant{
+        static constexpr auto value = false;
+    };
+
+    template <typename T, std::size_t V>
+    struct is_integral_constant<std::integral_constant<T, V>>{
+        static constexpr auto value = true;
+    };
+
+    template <typename T>
+    static constexpr auto is_integral_constant_v = is_integral_constant<T>::value;
     
 } // namespace bygo::util
 
