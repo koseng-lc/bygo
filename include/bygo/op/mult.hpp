@@ -18,7 +18,7 @@ namespace impl{
     template <typename in_t, typename op_t, typename out_t, typename axes1_t, typename axes2_t, std::size_t ...I>
     constexpr auto mult(in_t&& in, op_t&& op, out_t&& out, axes1_t axes1, axes2_t axes2, std::index_sequence<I...>){
         auto& out_part(out(std::get<I>(axes1)...));
-        // auto op_part()
+
         using shape_t = aux::nth_shape_t<typename util::remove_cvref_t<out_t>::shape_type, sizeof...(I)+1>;
         if constexpr(aux::is_scalar_v<util::remove_cvref_t<op_t>>){
             ::bygo::op::apply<decltype(_mult()),

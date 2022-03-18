@@ -3,6 +3,5 @@
 
 #include <bygo/basic/basic_elem.hpp>
 #include <bygo/basic/matrix.hpp>
-#include <bygo/basic/eye.hpp>
 
 #endif

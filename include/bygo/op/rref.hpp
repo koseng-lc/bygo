@@ -19,8 +19,8 @@ namespace impl{
 
             using in_type = util::remove_cvref_t<in_t>;
 
-            constexpr auto nrows{in_type::nrows};
-            constexpr auto ncols{in_type::ncols};
+            constexpr auto nrows{aux::nth_shape_dim_v<typename in_type::shape_type, 1>};
+            constexpr auto ncols{aux::nth_shape_dim_v<typename in_type::shape_type, 2>};
 
             if(index >= nrows){
                 index = row;
@@ -53,8 +53,8 @@ namespace impl{
             
             using out_type = util::remove_cvref_t<out_t>;
 
-            constexpr auto nrows{out_type::nrows};
-            constexpr auto ncols{out_type::ncols};
+            constexpr auto nrows{aux::nth_shape_dim_v<typename out_type::shape_type, 1>};
+            constexpr auto ncols{aux::nth_shape_dim_v<typename out_type::shape_type, 2>};
 
             auto index(row);
             if(lead >= ncols){
@@ -76,7 +76,7 @@ namespace impl{
     constexpr auto rref(in_t&& in, out_t&& out){
         std::size_t lead(0);
 
-        constexpr auto nrows{util::remove_cvref_t<out_t>::nrows};
+        constexpr auto nrows{aux::nth_shape_dim_v<typename util::remove_cvref_t<out_t>::shape_type, 1>};
 
         util::for_loop<nrows>(rref_sub1(), std::forward<in_t>(in), std::forward<out_t>(out), std::forward<std::size_t>(lead));
     }

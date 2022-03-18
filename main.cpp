@@ -129,6 +129,7 @@ int main(int argc, char** argv){
 
     using matrix_t = bygo::matrix<double, 3, 2>;
     using matrix_rref_t = bygo::matrix<double, 3, 4>;
+    using matrix_sqr_t = bygo::matrix<double, 3, 3>;
     using vec_t = bygo::basic_elem<double, bygo::shape<2>>;
     {
         constexpr matrix_t m({{
@@ -182,15 +183,22 @@ int main(int argc, char** argv){
             {-2,0,-3,22}
         }});
 
+        matrix_sqr_t m_inv_target({{
+            {1,2,-1},
+            {2,3,-1},
+            {-2,0,3}
+        }});
+
         constexpr auto m_swapped(bygo::op::swap_elem(m, std::make_tuple(1), std::make_tuple(2)));
         // bygo::util::print_matrix(m_swapped);
         auto m_add(bygo::op::add(m, m2, std::make_tuple(1), std::make_tuple(0)));
         // std::cout << "====== Add sub:" << std::endl;
         // bygo::util::print_matrix(m_add);
         // auto m_inv(bygo::op::inv(m));
-        auto m_inv(bygo::op::inv(m_rref));
-        // std::cout << "====== M_inv" << std::endl;
-        // bygo::util::print_matrix(m_inv);
+        check(bygo::aux::shape_dim_t<decltype(m_inv_target)::shape_type>{});
+        auto m_inv(bygo::op::inv(m_inv_target));
+        std::cout << "====== M_inv" << std::endl;
+        bygo::util::print_matrix(m_inv);
         auto m_assign(bygo::op::assign(m, m2, std::make_tuple(1)));
         // auto m_assign(bygo::op::assign(m,m2));
         // std::cout << "====== Assign sub:" << std::endl;

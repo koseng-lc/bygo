@@ -126,9 +126,6 @@ public:
     constexpr auto operator+(op_t&& _op){
         static_assert(aux::is_shape_equal_v<shape_type, typename util::remove_cvref_t<op_t>::shape_type>, "[basic_elem] Shape must be the same!");
 
-        // basic_elem<scalar_t, shape_t> res;
-        // op::add((*this), std::forward<op_t>(_op), res);
-
         return op::add((*this), std::forward<op_t>(_op));
     }
 

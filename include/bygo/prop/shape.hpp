@@ -236,7 +236,6 @@ namespace impl{
 
 template <typename shape_t, std::size_t Ax, std::size_t ...Axs>
 struct to_single{
-    // static constexpr auto value = impl::to_single<shape_t, shape_t::size-1, Ax, Axs...>::value;
     static constexpr auto value = impl::to_single<shape_t, sizeof...(Axs), Ax, Axs...>::value;
 };
 
