@@ -15,41 +15,6 @@ constexpr auto check(std::index_sequence<I...>){
     std::cout << std::endl;
 }
 
-template <typename in_t, std::size_t ...I>
-constexpr auto check2(in_t in, std::index_sequence<I...>){
-    // (std::cout << I << " ", ...);
-    // std::cout << std::endl;
-    // ((in.operator()<I>() = 1), ...);
-    // in(std::integral_constant<std::size_t, I>{}) = 1;
-}
-
-template <class T>
-std::string
-type_name()
-{
-    typedef typename std::remove_reference<T>::type TR;
-    std::unique_ptr<char, void(*)(void*)> own
-           (
-#ifndef _MSC_VER
-                abi::__cxa_demangle(typeid(TR).name(), nullptr,
-                                           nullptr, nullptr),
-#else
-                nullptr,
-#endif
-                std::free
-           );
-    std::string r = own != nullptr ? own.get() : typeid(TR).name();
-    if (std::is_const<TR>::value)
-        r += " const";
-    if (std::is_volatile<TR>::value)
-        r += " volatile";
-    if (std::is_lvalue_reference<T>::value)
-        r += "&";
-    else if (std::is_rvalue_reference<T>::value)
-        r += "&&";
-    return r;
-}
-
 int main(int argc, char** argv){
 
     using tensor_stl_t = bygo::basic_elem<double, bygo::shape<3,2,4,2>, true>;
@@ -149,9 +114,13 @@ int main(int argc, char** argv){
         bygo::util::print(t_ins1);
         // bygo::util::print(t_assign);
 
-        auto t_stack(bygo::op::stack<1>(t, t2));
+        auto t_stack(bygo::op::stack<3>(t, t2));
         std::cout << "Stack:" << std::endl;
         bygo::util::print(t_stack);
+
+        auto t_concat(bygo::op::concat<0>(t, t2));
+        std::cout << "Concat:" << std::endl;
+        // bygo::util::print(t_concat);
     }
 
     using matrix_t = bygo::matrix<double, 3, 2>;

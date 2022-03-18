@@ -8,10 +8,44 @@ namespace bygo::op{
 
 namespace impl{
 
-    template <typename in_t, typename op_t, typename out_t, std::size_t ...I>
+    template <typename tup_t, std::size_t ...I>
+    constexpr auto _cut_last(tup_t&& tup, std::index_sequence<I...>){
+        return std::make_tuple(std::get<I>(tup)...);
+    }
+
+    template <typename ...Ts>
+    constexpr auto cut_last(Ts... ts){
+        using Is = std::make_index_sequence<sizeof...(Ts)-1>;
+        return _cut_last(std::forward_as_tuple(ts...), Is{});
+    }
+
+    template <auto idx, typename in_t, typename op_t>
+    constexpr decltype(auto) select_op(in_t&& in, op_t&& op){
+        if(idx){
+            return std::forward<op_t>(op);
+        }else{
+            return std::forward<in_t>(in);
+        }
+    }
+
+    template <typename shape_t, std::size_t axis, std::size_t idx, typename in_t, typename op_t, typename out_t, std::size_t ...J, typename ...axes_t>
+    constexpr auto _stack(in_t&& in, op_t&& op, out_t&& out, std::index_sequence<J...>, axes_t ...axes){
+        using Js = std::make_index_sequence<shape_t::dim>;
+        if constexpr(sizeof...(axes_t)-1 == axis){
+            if constexpr(sizeof...(axes_t) == 1){
+                out = ::bygo::op::assign(std::forward<out_t>(out), select_op<idx>(std::forward<in_t>(in), std::forward<op_t>(op)), std::make_tuple(axes...));
+            }else{
+                out = ::bygo::op::assign(std::forward<out_t>(out), select_op<idx>(std::forward<in_t>(in), std::forward<op_t>(op)), std::make_tuple(axes...), cut_last(axes...));
+            }
+        }else{
+            (_stack<typename shape_t::res_shape, axis, J>(std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), Js{}, axes..., J), ...);
+        }
+    }
+
+    template <typename shape_t, std::size_t axis, typename in_t, typename op_t, typename out_t, std::size_t ...I>
     constexpr auto stack(in_t&& in, op_t&& op, out_t&& out, std::index_sequence<I...>){
-        ((out(std::integral_constant<std::size_t, I>{}) = in(std::integral_constant<std::size_t, I>{})), ...);
-        ((out(std::integral_constant<std::size_t, I + sizeof...(I)>{}) = op(std::integral_constant<std::size_t, I>{})), ...);
+        using Is = std::make_index_sequence<shape_t::dim>;
+        (_stack<typename shape_t::res_shape, axis, I>(std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), Is{}, I), ...);
     }
 }
 
@@ -20,10 +54,11 @@ constexpr auto stack(in_t&& in, op_t&& op){
     using in_type = util::remove_cvref_t<in_t>;
     using out_shape = aux::insert_axis_t<axis, 2, typename in_type::shape_type>;
     using out_type = basic_elem<typename in_type::scalar_type, out_shape>;
-    using Is = std::make_index_sequence<in_type::nelem>;
+
+    using Is = std::make_index_sequence<out_shape::dim>;
 
     out_type res;
-    impl::stack(std::forward<in_t>(in), std::forward<op_t>(op), res, Is{});
+    impl::stack<typename out_shape::res_shape, axis>(std::forward<in_t>(in), std::forward<op_t>(op), res, Is{});
 
     return res;
 }

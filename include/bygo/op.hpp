@@ -14,5 +14,6 @@
 #include <bygo/op/assign.hpp>
 #include <bygo/op/insert.hpp>
 #include <bygo/op/stack.hpp>
+#include <bygo/op/concat.hpp>
 
 #endif

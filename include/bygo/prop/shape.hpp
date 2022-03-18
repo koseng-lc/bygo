@@ -1,5 +1,5 @@
-#ifndef BYGO_SHAPE_HPP
-#define BYGO_SHAPE_HPP
+#ifndef BYGO_PROP_SHAPE_HPP
+#define BYGO_PROP_SHAPE_HPP
 
 #include <tuple>
 
