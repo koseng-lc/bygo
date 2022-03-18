@@ -118,9 +118,13 @@ int main(int argc, char** argv){
         std::cout << "Stack:" << std::endl;
         bygo::util::print(t_stack);
 
-        auto t_concat(bygo::op::concat<0>(t, t2));
+        bygo::op::fill(t2, -1);
+        // bygo::util::print(t2);
+        auto t_concat(bygo::op::concat<3>(t, t2));
         std::cout << "Concat:" << std::endl;
-        // bygo::util::print(t_concat);
+        bygo::util::print(t_concat);
+
+        check(bygo::aux::shape_dim_t<decltype(t_concat)::shape_type>{});
     }
 
     using matrix_t = bygo::matrix<double, 3, 2>;
@@ -191,6 +195,9 @@ int main(int argc, char** argv){
         // auto m_assign(bygo::op::assign(m,m2));
         // std::cout << "====== Assign sub:" << std::endl;
         // bygo::util::print_matrix(m_assign);
+
+        auto m_concat(bygo::op::concat<1>(m_rref, m2));
+        bygo::util::print(m_concat);
 
         vec_t v{{
             1,2
