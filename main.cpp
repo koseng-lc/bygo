@@ -48,7 +48,7 @@ int main(int argc, char** argv){
     }
 
     {
-        tensor_basic2_t t{{
+        constexpr tensor_basic2_t t{{
             {
                 {{1,2},{3,4},{5,6},{7,8}},
                 {{3,4},{1,2},{7,8},{5,6}}
@@ -63,7 +63,7 @@ int main(int argc, char** argv){
             }
         }};
 
-        tensor_basic2_t t2{{
+        constexpr tensor_basic2_t t2{{
             {
                 {{1,2},{3,4},{5,6},{7,8}},
                 {{3,4},{1,2},{7,8},{5,6}}
@@ -78,7 +78,7 @@ int main(int argc, char** argv){
             }
         }};
 
-        tensor_basic3_t t3{{
+        constexpr tensor_basic3_t t3{{
             {
                 {9,1},{3,4},{5,6},{7,8}
             },
@@ -87,7 +87,7 @@ int main(int argc, char** argv){
             }
         }};
 
-        tensor_basic4_t t4{{
+        constexpr tensor_basic4_t t4{{
             {1,2},
             {3,4},
             {5,6},
@@ -96,35 +96,39 @@ int main(int argc, char** argv){
         
         // Set element-(0,1,0,1)
         // t(1,0,1,0) = 19;
-        t(2,1,3,1) = 19;
+        // t(2,1,3,1) = 19;
         // t2(1,0,1,0) = 11;
         // Print element-(0,1,0,1)
         std::cout << "t(2,1,3,1): " << t[2][1][3][1] << std::endl;
         std::cout << "t(2,1,3,1): " << t(2,1,3,1) << std::endl;
 
-        // std::cout << tensor_basic2_t::nelem << std::endl;
-        // auto res = t + t2;
+        // auto res(bygo::op::add(t, t2));
+        // std::cout << "Add:" << std::endl;
+        // bygo::util::print(res);
+
         // bygo::op::fill(t, -1.);
         // std::cout << "Result1: " << res[0][1][0][1] << std::endl;
         // std::cout << "Result2: " << t[0][1][0][1] << std::endl;
 
-        auto t_ins1(bygo::op::insert<1, 0>(t2, t3));
-        // auto t_ins1(bygo::op::insert(t2, t3, {{1}}));
-        auto t_assign(bygo::op::assign(t2, t3, std::make_tuple(0)));
-        bygo::util::print(t_ins1);
-        // bygo::util::print(t_assign);
+        // constexpr auto t_ins(bygo::op::insert<1, 0>(t2, t3));
+        // std::cout << "Insert:" << std::endl;
+        // bygo::util::print(t_ins);
+
+        // constexpr auto t_assign(bygo::op::assign(t2, t3, std::make_tuple(0,0,0) std::make_tuple(0,0)));
+        // auto t_assign(bygo::op::assign(t2, t3, std::make_tuple(0,0,0), std::make_tuple(0,0)));
+        auto t_assign(bygo::op::assign(t, t2, std::make_tuple(0,0,0), std::make_tuple(0,0,0)));
+        std::cout << "Assign:" << std::endl;
+        bygo::util::print(t_assign);
 
         auto t_stack(bygo::op::stack<3>(t, t2));
         std::cout << "Stack:" << std::endl;
         bygo::util::print(t_stack);
 
-        bygo::op::fill(t2, -1);
-        // bygo::util::print(t2);
         auto t_concat(bygo::op::concat<3>(t, t2));
         std::cout << "Concat:" << std::endl;
         bygo::util::print(t_concat);
 
-        check(bygo::aux::shape_dim_t<decltype(t_concat)::shape_type>{});
+        // check(bygo::aux::shape_dim_t<decltype(t_concat)::shape_type>{});
     }
 
     using matrix_t = bygo::matrix<double, 3, 2>;
@@ -173,7 +177,6 @@ int main(int argc, char** argv){
         std::cout << "======M2" << std::endl;
         bygo::util::print_matrix(m2);
 
-        // constexpr auto m_inv(bygo::op::inv(m));
         auto m3(m);
         // m3(0) = m2(1);
 
@@ -183,26 +186,21 @@ int main(int argc, char** argv){
             {-2,0,-3,22}
         }});
 
-        matrix_sqr_t m_inv_target({{
+        constexpr matrix_sqr_t m_inv_target({{
             {1,2,-1},
             {2,3,-1},
-            {-2,0,3}
+            {-2,0,-3}
         }});
 
-        constexpr auto m_swapped(bygo::op::swap_elem(m, std::make_tuple(1), std::make_tuple(2)));
+        // constexpr auto m_swapped(bygo::op::swap_elem(m, std::make_tuple(1), std::make_tuple(2)));
         // bygo::util::print_matrix(m_swapped);
         auto m_add(bygo::op::add(m, m2, std::make_tuple(1), std::make_tuple(0)));
         // std::cout << "====== Add sub:" << std::endl;
         // bygo::util::print_matrix(m_add);
-        // auto m_inv(bygo::op::inv(m));
-        check(bygo::aux::shape_dim_t<decltype(m_inv_target)::shape_type>{});
+
         auto m_inv(bygo::op::inv(m_inv_target));
         std::cout << "====== M_inv" << std::endl;
         bygo::util::print_matrix(m_inv);
-        auto m_assign(bygo::op::assign(m, m2, std::make_tuple(1)));
-        // auto m_assign(bygo::op::assign(m,m2));
-        // std::cout << "====== Assign sub:" << std::endl;
-        // bygo::util::print_matrix(m_assign);
 
         auto m_concat(bygo::op::concat<1>(m_rref, m2));
         bygo::util::print(m_concat);

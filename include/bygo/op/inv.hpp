@@ -19,19 +19,24 @@ namespace impl{
     template <typename in_t, typename op_t, std::size_t ...I>
     constexpr auto get_sub(in_t&& in, op_t&& op, std::index_sequence<I...>){
         using Is = std::make_index_sequence<aux::nth_shape_dim_v<typename util::remove_cvref_t<in_t>::shape_type, 2>>;
-        std::cout << aux::nth_shape_dim_v<typename util::remove_cvref_t<in_t>::shape_type, 2> << std::endl;
+
         (_get_sub(std::forward<in_t>(in), std::forward<op_t>(op), Is{}, I), ...);
     }
 
     template <typename in_t, typename out_t>
     constexpr auto inv(in_t&& in, out_t&& out){
-        auto I(::bygo::ctype::eye(in));
-        auto aug(::bygo::op::concat<1>(in, I));
+        auto iden(::bygo::ctype::eye(std::forward<in_t>(in)));
+        // using in_type = util::remove_cvref_t<in_t>;
+        // using in_shape = typename in_type::shape_type;
+        // constexpr auto nrows{aux::nth_shape_dim_v<in_shape,1>};
+        // constexpr auto ncols{aux::nth_shape_dim_v<in_shape,2>};
+        // auto I{::bygo::ctype::eye<nrows,ncols, typename in_type::scalar_type>()};
+        auto aug(::bygo::op::concat<1>(std::forward<in_t>(in), iden));
         auto rref_res(::bygo::op::rref(std::forward<decltype(aug)>(aug)));
-        using rref_t = decltype(rref_res);
 
+        using rref_t = decltype(rref_res);
         using Is = std::make_index_sequence<aux::nth_shape_dim_v<typename util::remove_cvref_t<out_t>::shape_type, 1>>;
-        std::cout << aux::nth_shape_dim_v<typename util::remove_cvref_t<out_t>::shape_type, 1> << std::endl;
+
         get_sub(std::forward<out_t>(out), std::forward<rref_t>(rref_res), Is{});
     }
 }

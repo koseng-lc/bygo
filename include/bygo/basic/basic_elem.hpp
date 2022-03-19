@@ -28,6 +28,10 @@ public:
         return data_[i];
     }
 
+    // constexpr auto operator=(){
+
+    // }
+
     /**
      *  @brief Element getter using parentheses
      */ 

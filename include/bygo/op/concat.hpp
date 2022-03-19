@@ -51,7 +51,7 @@ constexpr auto concat(in_t&& in, op_t&& op){
 
     using Is = std::make_index_sequence<out_shape::dim>;
 
-    out_type res;
+    out_type res{};
     impl::concat<typename out_shape::res_shape, axis>(std::forward<in_t>(in), std::forward<op_t>(op), res, Is{});
 
     return res;

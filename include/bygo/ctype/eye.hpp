@@ -30,7 +30,7 @@ constexpr auto eye(){
     using out_type = matrix<scalar_t, NR, NC>;
     using Is = std::make_index_sequence<NR>;
 
-    out_type res;
+    out_type res{};
     impl::eye<NC>(res, Is{});
 
     return res;

@@ -6,49 +6,49 @@
 
 namespace bygo::op{
 
-template <typename fn_t, typename in_t, typename op_t, typename out_t, typename shape_t = typename util::remove_cvref_t<out_t>::shape_type, typename Is = std::make_index_sequence<shape_t::dim>>
-constexpr auto apply(fn_t&& fn, in_t&& in, op_t&& op, out_t&& out);
-
 namespace impl{
-    template <typename fn_t, typename in_t, typename op_t, typename out_t, typename shape_t, std::size_t... I>
-    constexpr auto apply(fn_t&& fn, in_t&& in, op_t&& op, out_t&& out, std::index_sequence<I...>){
-        // using fn_fwd_t = decltype(std::forward<de cltype(fn)>(fn));
-        // using in_fwd_t = decltype(std::forward<decltype(in[I])>(in[I]));
-        // using op_fwd_t = decltype(std::forward<decltype(op[I])>(op[I]));
-        // using out_fwd_t = decltype(std::forward<decltype(out[I])>(out[I]));
-        
-        if constexpr(aux::is_scalar_v<util::remove_cvref_t<op_t>>){
-            (::bygo::op::apply<decltype(std::forward<fn_t>(fn)),
-                decltype(std::forward<decltype(in[I])>(in[I])),
-                decltype(std::forward<op_t>(op)),
-                decltype(std::forward<decltype(out[I])>(out[I])), typename shape_t::res_shape>
-                (std::forward<fn_t>(fn), std::forward<decltype(in[I])>(in[I]), std::forward<op_t>(op), std::forward<decltype(out[I])>(out[I])), ...);
+    template <typename shape_t, typename fn_t, typename in_t, typename op_t, typename out_t, std::size_t... I>
+    constexpr void _apply(fn_t&& fn, in_t&& in, op_t&& op, out_t&& out, std::index_sequence<I...>, std::size_t idx = 0){
+        if constexpr(aux::is_scalar_v<util::remove_cvref_t<out_t>>){
+            out = fn(in, op);
         }else{
-            (::bygo::op::apply<decltype(std::forward<fn_t>(fn)),
-                decltype(std::forward<decltype(in[I])>(in[I])),
-                decltype(std::forward<decltype(op[I])>(op[I])),
-                decltype(std::forward<decltype(out[I])>(out[I])), typename shape_t::res_shape>
-                (std::forward<fn_t>(fn), std::forward<decltype(in[I])>(in[I]), std::forward<decltype(op[I])>(op[I]), std::forward<decltype(out[I])>(out[I])), ...);
+            using Is = std::make_index_sequence<shape_t::dim>;
+            if constexpr(aux::is_scalar_v<util::remove_cvref_t<op_t>>){
+                (_apply<typename shape_t::res_shape>
+                    (std::forward<fn_t>(fn), std::forward<decltype(in[I])>(in[I]), std::forward<op_t>(op), std::forward<decltype(out[I])>(out[I]), Is{}), ...);
+            }else{
+                (_apply<typename shape_t::res_shape>
+                    (std::forward<fn_t>(fn), std::forward<decltype(in[I])>(in[I]), std::forward<decltype(op[I])>(op[I]), std::forward<decltype(out[I])>(out[I]), Is{}), ...);
+            }
+        }
+    }
+
+    template <typename shape_t, typename fn_t, typename in_t, typename op_t, typename out_t, std::size_t... I>
+    constexpr auto apply(fn_t&& fn, in_t&& in, op_t&& op, out_t&& out, std::index_sequence<I...>){
+        using Is = std::make_index_sequence<shape_t::dim>;
+
+        if constexpr(aux::is_scalar_v<util::remove_cvref_t<out_t>>){
+            (_apply<typename shape_t::res_shape>
+                    (std::forward<fn_t>(fn), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), Is{}, I), ...);
+        }else{
+            using Is = std::make_index_sequence<shape_t::dim>;
+            if constexpr(aux::is_scalar_v<util::remove_cvref_t<op_t>>){
+                (_apply<typename shape_t::res_shape>
+                    (std::forward<fn_t>(fn), std::forward<decltype(in[I])>(in[I]), std::forward<op_t>(op), std::forward<decltype(out[I])>(out[I]), Is{}), ...);
+            }else{
+                (_apply<typename shape_t::res_shape>
+                    (std::forward<fn_t>(fn), std::forward<decltype(in[I])>(in[I]), std::forward<decltype(op[I])>(op[I]), std::forward<decltype(out[I])>(out[I]), Is{}), ...);
+            }
         }
     }
 }
 
-template <typename fn_t, typename in_t, typename op_t, typename out_t, typename shape_t = typename util::remove_cvref_t<out_t>::shape_type, typename Is = std::make_index_sequence<shape_t::dim>>
+template <typename fn_t, typename in_t, typename op_t, typename out_t, typename shape_t = typename util::remove_cvref_t<out_t>::shape_type>
 constexpr auto apply(fn_t&& fn, in_t&& in, op_t&& op, out_t&& out){
-    if constexpr(aux::is_scalar_v<util::remove_cvref_t<out_t>>){
-        out = fn(in, op);
-    }else{
-        // using fn_fwd_t = decltype(std::forward<decltype(fn)>(fn));
-        // using in_fwd_t = decltype(std::forward<decltype(in[I])>(in[I]));
-        // using op_fwd_t = decltype(std::forward<decltype(op[I])>(op[I]));
-        // using out_fwd_t = decltype(std::forward<decltype(out[I])>(out[I]));
+    using Is = std::make_index_sequence<shape_t::dim>;
 
-        ::bygo::op::impl::apply<decltype(std::forward<fn_t>(fn)),
-            decltype(std::forward<in_t>(in)),
-            decltype(std::forward<op_t>(op)),
-            decltype(std::forward<out_t>(out)), shape_t>
-            (std::forward<fn_t>(fn), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), Is{});
-    }
+    impl::apply<typename shape_t::res_shape>
+        (std::forward<fn_t>(fn), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), Is{});
 }
 
 }

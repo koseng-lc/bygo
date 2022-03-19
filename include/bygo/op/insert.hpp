@@ -62,7 +62,7 @@ constexpr auto insert(in_t&& in, op_t&& op){
 
     // static_assert(aux::is_shape_equal_v<res_shape, op_shape>, "[insert] The target shape is not compatible.");
 
-    out_type res;
+    out_type res{};
     impl::insert<index, axis, out_shape>(std::forward<in_t>(in), std::forward<op_t>(op), res, std::make_index_sequence<out_shape::dim>{});
 
     return res;

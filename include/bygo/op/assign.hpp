@@ -15,11 +15,6 @@ namespace impl{
         }
     };
 
-    template <typename tup_t>
-    constexpr auto extract_axes(tup_t&& tup){
-
-    }
-
     template <typename in_t, typename op_t, typename out_t, typename axes1_t, typename axes2_t, std::size_t ...I, std::size_t ...J>
     constexpr auto assign(in_t&& in, op_t&& op, out_t&& out, axes1_t axes1, axes2_t axes2, std::index_sequence<I...>, std::index_sequence<J...>){
         auto& out_part(out(std::get<I>(axes1)...));
@@ -27,8 +22,8 @@ namespace impl{
         ::bygo::op::apply<decltype(_assign()),
             decltype(in(std::get<I>(axes1)...)),
             decltype(op(std::get<J>(axes2)...)),
-            decltype(out(std::get<I>(axes1)...)),
-            aux::nth_shape_t<typename util::remove_cvref_t<out_t>::shape_type, sizeof...(I)+1>>
+            decltype(out_part),
+            aux::nth_shape_t<typename util::remove_cvref_t<out_t>::shape_type, sizeof...(I)>>
         (_assign(), in(std::get<I>(axes1)...), op(std::get<J>(axes2)...), out_part);
     }
 
@@ -39,7 +34,7 @@ namespace impl{
         ::bygo::op::apply<decltype(_assign()),
             decltype(in(std::get<I>(axes)...)),
             decltype(std::forward<op_t>(op)),
-            decltype(out(std::get<I>(axes)...)),
+            decltype(out_part),
             aux::nth_shape_t<typename util::remove_cvref_t<out_t>::shape_type, sizeof...(I)+1>>
         (_assign(), in(std::get<I>(axes)...), std::forward<op_t>(op), out_part);
     }

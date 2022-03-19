@@ -21,7 +21,7 @@ namespace impl{
 
     template <auto idx, typename in_t, typename op_t>
     constexpr decltype(auto) select_op(in_t&& in, op_t&& op){
-        if(idx){
+        if constexpr(idx){
             return std::forward<op_t>(op);
         }else{
             return std::forward<in_t>(in);
@@ -57,12 +57,12 @@ constexpr auto stack(in_t&& in, op_t&& op){
 
     using Is = std::make_index_sequence<out_shape::dim>;
 
-    out_type res;
+    out_type res{};
     impl::stack<typename out_shape::res_shape, axis>(std::forward<in_t>(in), std::forward<op_t>(op), res, Is{});
 
     return res;
 }
 
-}
+} // namespace bygo::op
 
 #endif
