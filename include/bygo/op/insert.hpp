@@ -27,8 +27,9 @@ namespace impl{
 
     template <std::size_t index, std::size_t axis, std::size_t idx, typename shape_t, typename in_t, typename op_t, typename out_t, std::size_t ...I, typename ...axes_t>
     constexpr auto _insert(in_t&& in, op_t&& op, out_t&& out, std::index_sequence<I...>, axes_t ...axes){
-        using res_shape = typename shape_t::res_shape;
-        using Is = std::make_index_sequence<res_shape::dim>;
+
+        using Is = std::make_index_sequence<shape_t::dim>;
+
         if constexpr(sizeof...(axes_t)-1 == axis){
             if constexpr(idx < index){
                 out = ::bygo::op::assign(std::forward<out_t>(out), std::forward<in_t>(in), std::make_tuple(axes...), std::make_tuple(axes...));
@@ -38,15 +39,16 @@ namespace impl{
                 out = ::bygo::op::assign(std::forward<out_t>(out), std::forward<op_t>(op), std::make_tuple(axes...));
             }
         }else{
-            (_insert<index, axis, I, res_shape>(std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), Is{}, axes..., I), ...);
+            (_insert<index, axis, I, typename shape_t::res_shape>(std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), Is{}, axes..., I), ...);
         }
     }
 
     template <std::size_t index, std::size_t axis, typename shape_t, typename in_t, typename op_t, typename out_t, std::size_t ...I>
     constexpr auto insert(in_t&& in, op_t&& op, out_t&& out, std::index_sequence<I...>){
-        using res_shape = typename shape_t::res_shape;
-        using Is = std::make_index_sequence<res_shape::dim>;
-        (_insert<index, axis, I, res_shape>(std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), Is{}, I), ...);
+
+        using Is = std::make_index_sequence<shape_t::dim>;
+
+        (_insert<index, axis, I, typename shape_t::res_shape>(std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), Is{}, I), ...);
     }
 }
 
@@ -63,7 +65,7 @@ constexpr auto insert(in_t&& in, op_t&& op){
     // static_assert(aux::is_shape_equal_v<res_shape, op_shape>, "[insert] The target shape is not compatible.");
 
     out_type res{};
-    impl::insert<index, axis, out_shape>(std::forward<in_t>(in), std::forward<op_t>(op), res, std::make_index_sequence<out_shape::dim>{});
+    impl::insert<index, axis, typename out_shape::res_shape>(std::forward<in_t>(in), std::forward<op_t>(op), res, std::make_index_sequence<out_shape::dim>{});
 
     return res;
 }

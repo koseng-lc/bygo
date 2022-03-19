@@ -110,13 +110,13 @@ int main(int argc, char** argv){
         // std::cout << "Result1: " << res[0][1][0][1] << std::endl;
         // std::cout << "Result2: " << t[0][1][0][1] << std::endl;
 
-        // constexpr auto t_ins(bygo::op::insert<1, 0>(t2, t3));
-        // std::cout << "Insert:" << std::endl;
-        // bygo::util::print(t_ins);
+        constexpr auto t_ins(bygo::op::insert<1, 0>(t2, t3));
+        std::cout << "Insert:" << std::endl;
+        bygo::util::print(t_ins);
 
         // constexpr auto t_assign(bygo::op::assign(t2, t3, std::make_tuple(0,0,0) std::make_tuple(0,0)));
-        // auto t_assign(bygo::op::assign(t2, t3, std::make_tuple(0,0,0), std::make_tuple(0,0)));
-        auto t_assign(bygo::op::assign(t, t2, std::make_tuple(0,0,0), std::make_tuple(0,0,0)));
+        // auto t_assign(bygo::op::assign(t2, t3, std::make_tuple(0)));
+        constexpr auto t_assign(bygo::op::assign(t, t2, std::make_tuple(0), std::make_tuple(1)));
         std::cout << "Assign:" << std::endl;
         bygo::util::print(t_assign);
 
