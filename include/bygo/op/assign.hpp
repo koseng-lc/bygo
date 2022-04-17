@@ -15,13 +15,14 @@ namespace impl{
         }
     };
 
-    template <typename in_t, typename op_t, typename out_t, typename axes1_t, typename axes2_t, std::size_t ...I, std::size_t ...J>
-    constexpr auto assign(in_t&& in, op_t&& op, out_t&& out, axes1_t axes1, axes2_t axes2, std::index_sequence<I...>, std::index_sequence<J...>){
+    template <typename in_t, typename op_t, typename out_t, typename axes1_t, typename axes2_t>
+    constexpr auto assign(in_t&& in, op_t&& op, out_t&& out, axes1_t axes1, axes2_t axes2){
         ::bygo::op::apply(_assign(), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), axes1, axes2);
     }
 
-    template <typename in_t, typename op_t, typename out_t, typename axes_t, std::size_t ...I>
-    constexpr auto assign(in_t&& in, op_t&& op, out_t&& out, axes_t axes, std::index_sequence<I...>){
+    template <typename in_t, typename op_t, typename out_t, typename axes_t>
+    constexpr auto assign(in_t&& in, op_t&& op, out_t&& out, axes_t axes){
+        ::bygo::op::apply(_assign(), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), axes);
         // auto& out_part(out(std::get<I>(axes)...));
 
         // ::bygo::op::apply<aux::nth_shape_t<typename util::remove_cvref_t<out_t>::shape_type, sizeof...(I)+1>>
@@ -30,6 +31,7 @@ namespace impl{
 
     template <typename in_t, typename op_t, typename out_t>
     constexpr auto assign(in_t&& in, op_t&& op, out_t&& out){
+        // ::bygo::op::apply(_assign(), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), axes1, axes2);
         // ::bygo::op::apply<typename util::remove_cvref_t<out_t>::shape_type>(_assign(), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out));
     }
 }
@@ -37,11 +39,9 @@ namespace impl{
 template <typename in_t, typename op_t, typename ...axes1_t, typename ...axes2_t>
 constexpr auto assign(in_t&& in, op_t&& op, std::tuple<axes1_t...> axes1, std::tuple<axes2_t...> axes2){
     using out_type = util::remove_cvref_t<in_t>;
-    using Is = std::make_index_sequence<sizeof...(axes1_t)>;
-    using Js = std::make_index_sequence<sizeof...(axes2_t)>;
 
     out_type res(in);
-    impl::assign(std::forward<in_t>(in), std::forward<op_t>(op), res, axes1, axes2, Is{}, Js{});
+    impl::assign(std::forward<in_t>(in), std::forward<op_t>(op), res, axes1, axes2);
 
     return res;
 }
@@ -57,10 +57,9 @@ constexpr auto assign(in_t&& in, op_t&& op, std::tuple<axes_t...> axes){
     }else{
         using sub_shape = aux::nth_shape_t<typename in_type::shape_type, sizeof...(axes_t)>;
         using out_type = util::remove_cvref_t<in_t>;
-        using Is = std::make_index_sequence<sizeof...(axes_t)>;
 
         out_type res(in);
-        impl::assign(std::forward<in_t>(in), std::forward<op_t>(op), res, axes, Is{});
+        impl::assign(std::forward<in_t>(in), std::forward<op_t>(op), res, axes);
 
         return res;
     }

@@ -122,17 +122,17 @@ int main(int argc, char** argv){
         std::cout << "Assign:" << std::endl;
         bygo::util::print(t_assign);
 
-        // constexpr auto t_ins(bygo::op::insert<1, 1>(t2, t4));
-        // std::cout << "Insert:" << std::endl;
-        // bygo::util::print(t_ins);
+        constexpr auto t_ins(bygo::op::insert<1, 1>(t2, t, std::make_tuple(0,1)));
+        std::cout << "Insert:" << std::endl;
+        bygo::util::print(t_ins);
 
-        // constexpr auto t_stack(bygo::op::stack<2>(t, t2));
-        // std::cout << "Stack:" << std::endl;
-        // bygo::util::print(t_stack);
+        constexpr auto t_stack(bygo::op::stack<1>(t, t2));
+        std::cout << "Stack:" << std::endl;
+        bygo::util::print(t_stack);
 
-        // auto t_concat(bygo::op::concat<3>(t, t2));
-        // std::cout << "Concat:" << std::endl;
-        // bygo::util::print(t_concat);
+        constexpr auto t_concat(bygo::op::concat<3>(t, t2));
+        std::cout << "Concat:" << std::endl;
+        bygo::util::print(t_concat);
 
         // check(bygo::aux::shape_dim_t<decltype(t_concat)::shape_type>{});
     }
@@ -192,11 +192,11 @@ int main(int argc, char** argv){
         //     {-2,0,-3,22}
         // }});
 
-        // constexpr matrix_sqr_t m_inv_target({{
-        //     {1,2,-1},
-        //     {2,3,-1},
-        //     {-2,0,-3}
-        // }});
+        constexpr matrix_sqr_t m_inv_target({{
+            {1,2,-1},
+            {2,3,-1},
+            {-2,0,3}
+        }});
 
         // // constexpr auto m_swapped(bygo::op::swap_elem(m, std::make_tuple(1), std::make_tuple(2)));
         // // bygo::util::print_matrix(m_swapped);
@@ -204,9 +204,9 @@ int main(int argc, char** argv){
         // // std::cout << "====== Add sub:" << std::endl;
         // // bygo::util::print_matrix(m_add);
 
-        // auto m_inv(bygo::op::inv(m_inv_target));
-        // std::cout << "====== M_inv" << std::endl;
-        // bygo::util::print_matrix(m_inv);
+        constexpr auto m_inv(bygo::op::inv(m_inv_target));
+        std::cout << "M_inv" << std::endl;
+        bygo::util::print_matrix(m_inv);
 
         // auto m_concat(bygo::op::concat<1>(m_rref, m2));
         // bygo::util::print(m_concat);

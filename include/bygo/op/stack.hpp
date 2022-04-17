@@ -28,23 +28,35 @@ namespace impl{
         }
     }
 
-    template <typename shape_t, std::size_t axis, std::size_t idx, typename in_t, typename op_t, typename out_t, std::size_t ...J, typename ...axes_t>
-    constexpr auto _stack(in_t&& in, op_t&& op, out_t&& out, std::index_sequence<J...>, axes_t ...axes){
-        using Js = std::make_index_sequence<shape_t::dim>;
+    template <typename shape_t, std::size_t axis, std::size_t idx
+        , typename in_t, typename op_t, typename out_t
+        , std::size_t ...I, typename ...axes_t>
+    constexpr auto _stack(in_t&& in, op_t&& op, out_t&& out
+        , std::index_sequence<I...>, axes_t ...axes){
+
         if constexpr(sizeof...(axes_t)-1 == axis){
             if constexpr(sizeof...(axes_t) == 1){
-                out = ::bygo::op::assign(std::forward<out_t>(out), select_op<idx>(std::forward<in_t>(in), std::forward<op_t>(op)), std::make_tuple(axes...));
+                if constexpr(axis == 0){
+                    out = ::bygo::op::assign(std::forward<out_t>(out), select_op<idx>(std::forward<in_t>(in), std::forward<op_t>(op)), std::make_tuple(axes...));
+                }else{
+                    out = ::bygo::op::assign(std::forward<out_t>(out), select_op<idx>(std::forward<in_t>(in), std::forward<op_t>(op)), std::make_tuple(axes...), std::make_tuple(axes...));
+                }
             }else{
                 out = ::bygo::op::assign(std::forward<out_t>(out), select_op<idx>(std::forward<in_t>(in), std::forward<op_t>(op)), std::make_tuple(axes...), cut_last(axes...));
             }
         }else{
-            (_stack<typename shape_t::res_shape, axis, J>(std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), Js{}, axes..., J), ...);
+            using Is = std::make_index_sequence<shape_t::dim>;
+            
+            (_stack<typename shape_t::res_shape, axis, I>(std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out)
+                , Is{}, axes..., I), ...);
         }
     }
 
     template <typename shape_t, std::size_t axis, typename in_t, typename op_t, typename out_t, std::size_t ...I>
     constexpr auto stack(in_t&& in, op_t&& op, out_t&& out, std::index_sequence<I...>){
+
         using Is = std::make_index_sequence<shape_t::dim>;
+
         (_stack<typename shape_t::res_shape, axis, I>(std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), Is{}, I), ...);
     }
 }
