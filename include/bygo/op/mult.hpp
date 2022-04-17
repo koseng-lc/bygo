@@ -21,19 +21,11 @@ namespace impl{
 
         using shape_t = aux::nth_shape_t<typename util::remove_cvref_t<out_t>::shape_type, sizeof...(I)+1>;
         if constexpr(aux::is_scalar_v<util::remove_cvref_t<op_t>>){
-            ::bygo::op::apply<decltype(_mult()),
-                decltype(in(std::get<I>(axes1)...)),
-                decltype(std::forward<op_t>(op)),
-                decltype(out(std::get<I>(axes1)...)),
-                shape_t>
-            (_mult(), in(std::get<I>(axes1)...), std::forward<op_t>(op), out_part);
+            ::bygo::op::apply<shape_t>
+                (_mult(), in(std::get<I>(axes1)...), std::forward<op_t>(op), out_part);
         }else{
-            ::bygo::op::apply<decltype(_mult()),
-                decltype(in(std::get<I>(axes1)...)),
-                decltype(op(std::get<I>(axes2)...)),
-                decltype(out(std::get<I>(axes1)...)),
-                shape_t>
-            (_mult(), in(std::get<I>(axes1)...), op(std::get<I>(axes2)...), out_part);
+            ::bygo::op::apply<shape_t>
+                (_mult(), in(std::get<I>(axes1)...), op(std::get<I>(axes2)...), out_part);
         }
     }
 }
@@ -58,7 +50,7 @@ constexpr auto mult(in_t&& in, op_t&& op){
 
     out_type res(in);
 
-    apply(impl::_mult(), std::forward<in_t>(in), std::forward<op_t>(op), res);
+    apply<typename out_type::shape_type>(impl::_mult(), std::forward<in_t>(in), std::forward<op_t>(op), res);
 
     return res;
 }

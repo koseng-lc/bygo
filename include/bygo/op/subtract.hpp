@@ -18,7 +18,7 @@ namespace impl{
 
 template <typename in_t, typename op_t, typename out_t>
 constexpr auto subtract(in_t&& in, op_t&& op, out_t&& out){
-    apply(impl::subtract(), in, op, out);
+    apply<typename util::remove_cvref_t<out_t>::shape_type>(impl::subtract(), in, op, out);
 }
 
 } // namespace bygo::op

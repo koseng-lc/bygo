@@ -19,7 +19,7 @@ namespace impl{
 
 template <typename in_t, typename op_t>
 constexpr auto fill(in_t&& in, op_t&& op){
-    apply(impl::fill(), in, op, in);
+    apply<typename util::remove_cvref_t<in_t>::shape_type>(impl::fill(), in, op, in);
 }
 
 } // namespace bygo::op
