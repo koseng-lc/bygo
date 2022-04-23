@@ -134,7 +134,9 @@ int main(int argc, char** argv){
         std::cout << "Concat:" << std::endl;
         bygo::util::print(t_concat);
 
-        constexpr auto t_slice(bygo::op::slice(t, BYGO_IVAL(0,1)));
+        constexpr auto t_slice(bygo::op::slice(t, BYGO_IVAL(1,1), BYGO_IVAL(0,0), BYGO_IVAL_ALL()));
+        std::cout << "Slice:" << std::endl;
+        bygo::util::print(t_slice);
 
         check(bygo::aux::shape_dim_t<decltype(t_slice)::shape_type>{});
     }
