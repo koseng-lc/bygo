@@ -134,7 +134,9 @@ int main(int argc, char** argv){
         std::cout << "Concat:" << std::endl;
         bygo::util::print(t_concat);
 
-        // check(bygo::aux::shape_dim_t<decltype(t_concat)::shape_type>{});
+        constexpr auto t_slice(bygo::op::slice(t, BYGO_IVAL(0,1)));
+
+        check(bygo::aux::shape_dim_t<decltype(t_slice)::shape_type>{});
     }
 
     using matrix_t = bygo::matrix<double, 3, 2>;
