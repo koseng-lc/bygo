@@ -136,6 +136,52 @@ public:
     data_t data_;
 };
 
+namespace aux{
+
+namespace impl{
+
+    template <typename shape_t, typename obj1_t, typename obj2_t, std::size_t... I, typename ...axes_t>
+    constexpr auto _is_elem_wise_equal(obj1_t&& obj1, obj2_t&& obj2, std::index_sequence<I...>, axes_t... axes){
+
+        if(aux::is_scalar_v<util::remove_cvref_t<decltype(obj1(axes...))>>){
+
+            return (obj1(axes...) == obj2(axes...));
+        }else{
+
+            using Is = std::make_index_sequence<shape_t::dim>;
+
+            return (_is_elem_wise_equal<typename shape_t::res_shape>(std::forward<obj1_t>(obj1), std::forward<obj2_t>(obj2), Is{}, axes..., I) && ...);
+        }
+    }
+
+    template <typename shape_t, typename obj1_t, typename obj2_t, std::size_t... I>
+    constexpr auto is_elem_wise_equal(obj1_t&& obj1, obj2_t&& obj2, std::index_sequence<I...>){
+
+        using Is = std::make_index_sequence<shape_t::dim>;
+
+        return (_is_elem_wise_equal<typename shape_t::res_shape>(std::forward<obj1_t>(obj1), std::forward<obj2_t>(obj2), Is{}, I) && ...);
+    }
+}
+
+template <typename obj1_t, typename obj2_t>
+constexpr auto is_equal(obj1_t&& obj1, obj2_t&& obj2){
+
+    // Simultaneously check the size and its scalar type
+    if(std::is_same_v<util::remove_cvref_t<obj1_t>, util::remove_cvref_t<obj2_t>>){
+
+        // If the type is not equal, we don't need to evaluate this
+        using shape_type = typename util::remove_cvref_t<obj1_t>::shape_type;
+        using Is = std::make_index_sequence<shape_type::dim>;
+
+        return impl::is_elem_wise_equal<typename shape_type::res_shape>(std::forward<obj1_t>(obj1), std::forward<obj2_t>(obj2), Is{});
+    }else{
+
+        return false;
+    }
+}
+
+}
+
 }
 
 #endif

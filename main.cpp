@@ -143,6 +143,8 @@ int main(int argc, char** argv){
         std::cout << "Slice:" << std::endl;
         bygo::util::print(t_slice);
 
+        std::cout << "Is Equal: " << bygo::aux::is_equal(t, t2) << std::endl;
+
         check(bygo::aux::shape_dim_t<decltype(t_slice)::shape_type>{});
     }
 
