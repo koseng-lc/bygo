@@ -17,7 +17,7 @@ namespace impl{
 
     template <typename in_t, typename op_t, typename out_t, typename axes1_t, typename axes2_t, std::size_t ...I>
     constexpr auto mult(in_t&& in, op_t&& op, out_t&& out, axes1_t axes1, axes2_t axes2, std::index_sequence<I...>){
-        // using shape_t = aux::nth_shape_t<typename util::remove_cvref_t<out_t>::shape_type, sizeof...(I)+1>;
+
         if constexpr(aux::is_scalar_v<util::remove_cvref_t<op_t>>){
             ::bygo::op::apply(_mult(), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), axes1);
         }else{
@@ -28,7 +28,9 @@ namespace impl{
 
 template <typename in_t, typename op_t, typename ...axes1_t, typename ...axes2_t, typename Is = std::make_index_sequence<sizeof...(axes1_t)>>
 constexpr auto mult(in_t&& in, op_t&& op, std::tuple<axes1_t...> axes1, std::tuple<axes2_t...> axes2){
+
     using out_type = util::remove_cvref_t<in_t>;
+
     out_type res(in);
     impl::mult(std::forward<in_t>(in), std::forward<op_t>(op), res, axes1, axes2, Is{});
 
@@ -37,15 +39,16 @@ constexpr auto mult(in_t&& in, op_t&& op, std::tuple<axes1_t...> axes1, std::tup
 
 template <typename in_t, typename op_t, typename ...axes_t>
 constexpr auto mult(in_t&& in, op_t&& op, std::tuple<axes_t...> axes){
+
     return mult(std::forward<in_t>(in), std::forward<op_t>(op), axes, axes);
 }
 
 template <typename in_t, typename op_t>
 constexpr auto mult(in_t&& in, op_t&& op){
+    
     using out_type = util::remove_cvref_t<in_t>;
 
     out_type res(in);
-
     apply<typename out_type::shape_type>(impl::_mult(), std::forward<in_t>(in), std::forward<op_t>(op), res);
 
     return res;

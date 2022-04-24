@@ -25,9 +25,9 @@ namespace impl{
     }
 }
 
-template <std::size_t NR, std::size_t NC, typename scalar_t = double>
+template <std::size_t NR, std::size_t NC, typename scalar_t = util::default_scalar_t>
 constexpr auto eye(){
-    using out_type = matrix<scalar_t, NR, NC>;
+    using out_type = matrix<NR, NC, scalar_t>;
     using Is = std::make_index_sequence<NR>;
 
     out_type res{};

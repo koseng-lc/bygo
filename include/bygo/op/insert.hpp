@@ -72,7 +72,7 @@ constexpr auto insert(in_t&& in, op_t&& op, std::tuple<axes_t...> axes){
     using in_shape = typename in_type::shape_type;
 
     using out_shape = aux::add_nth_shape_t<axis, 1, in_shape>;
-    using out_type = basic_elem<typename in_type::scalar_type, out_shape>;
+    using out_type = basic_elem<out_shape, typename in_type::scalar_type>;
 
     using res_shape = aux::nth_shape_t<in_shape, axis+1>;
     using op_shape = typename util::remove_cvref_t<op_t>::shape_type;

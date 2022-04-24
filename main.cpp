@@ -25,11 +25,11 @@ struct op_apply{
 
 int main(int argc, char** argv){
 
-    using tensor_stl_t = bygo::basic_elem<double, bygo::shape<3,2,4,2>, true>;
-    using tensor2_t = bygo::basic_elem<double, bygo::shape<3,2,3>>;
-    using tensor_basic2_t = bygo::basic_elem<double, bygo::shape<3,2,4,2>>;
-    using tensor_basic3_t = bygo::basic_elem<double, bygo::shape<2,4,2>>;
-    using tensor_basic4_t = bygo::basic_elem<double, bygo::shape<4,2>>;
+    using tensor_stl_t = bygo::basic_elem<bygo::shape<3,2,4,2>, double, true>;
+    using tensor2_t = bygo::basic_elem<bygo::shape<3,2,3>>;
+    using tensor_basic2_t = bygo::basic_elem<bygo::shape<3,2,4,2>>;
+    using tensor_basic3_t = bygo::basic_elem<bygo::shape<2,4,2>>;
+    using tensor_basic4_t = bygo::basic_elem<bygo::shape<4,2>>;
 
     {
         // tensor_stl_t t{{{
@@ -106,6 +106,7 @@ int main(int argc, char** argv){
         // t(1,0,1,0) = 19;
         // t(2,1,3,1) = 19;
         // t2(1,0,1,0) = 11;
+
         // Print element-(0,1,0,1)
         std::cout << "t(2,1,3,1): " << t[2][1][3][1] << std::endl;
         std::cout << "t(2,1,3,1): " << t(2,1,3,1) << std::endl;
@@ -117,6 +118,10 @@ int main(int argc, char** argv){
         constexpr auto t_add(bygo::op::add(t, t2, std::make_tuple(0,1,0), std::make_tuple(1,0,0)));
         std::cout << "Add:" << std::endl;
         bygo::util::print(t_add);
+
+        constexpr auto t_subtract(bygo::op::subtract(t, t2, std::make_tuple(0,1,0), std::make_tuple(1,0,0)));
+        std::cout << "Subtract:" << std::endl;
+        bygo::util::print(t_subtract);
 
         constexpr auto t_assign(bygo::op::assign(t, t2, std::make_tuple(0,0), std::make_tuple(1,0)));
         std::cout << "Assign:" << std::endl;
@@ -141,10 +146,10 @@ int main(int argc, char** argv){
         check(bygo::aux::shape_dim_t<decltype(t_slice)::shape_type>{});
     }
 
-    using matrix_t = bygo::matrix<double, 3, 2>;
-    using matrix_rref_t = bygo::matrix<double, 3, 4>;
-    using matrix_sqr_t = bygo::matrix<double, 3, 3>;
-    using vec_t = bygo::basic_elem<double, bygo::shape<2>>;
+    using matrix_t = bygo::matrix<3, 2>;
+    using matrix_rref_t = bygo::matrix<3, 4>;
+    using matrix_sqr_t = bygo::matrix<3, 3>;
+    using vec_t = bygo::basic_elem<bygo::shape<2>>;
     {
         constexpr matrix_t m({{
             {1,2},

@@ -10,7 +10,7 @@
 
 namespace bygo{
 
-template <typename scalar_t, typename shape_t, auto use_stl=false>
+template <typename shape_t, typename scalar_t = util::default_scalar_t, auto use_stl=false>
 class basic_elem{
 public:
     

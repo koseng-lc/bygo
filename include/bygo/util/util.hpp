@@ -4,6 +4,11 @@
 namespace bygo::util{
 
     /**
+     * @brief Default scalar type
+     */
+    using default_scalar_t = double;
+
+    /**
      *  @brief Remove constant and/or reference
      */ 
     template <typename T>
