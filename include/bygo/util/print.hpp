@@ -4,6 +4,8 @@
 #include <bygo/prop/shape.hpp>
 #include <bygo/util/util.hpp>
 
+#include <iostream>
+
 namespace bygo::util{
 
 template <typename in_t>

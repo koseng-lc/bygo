@@ -2,7 +2,7 @@
 #include <memory>
 #include <cxxabi.h>
 
-#include <bygo.hpp>
+#include <bygo/bygo.hpp>
 #include <bygo/prop/ax.hpp>
 
 template <typename T>

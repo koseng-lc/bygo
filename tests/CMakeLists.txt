@@ -3,7 +3,9 @@ project(bygo_tests)
 
 find_package(GTest REQUIRED)
 
-add_executable(basic_elem bygo/basic/basic_elem)
-target_link_libraries(basic_elem
+add_executable(basic_elem_test bygo/basic/basic_elem.cpp)
+
+target_link_libraries(basic_elem_test
     ${GTEST_LIBRARIES}
+    pthread
 )

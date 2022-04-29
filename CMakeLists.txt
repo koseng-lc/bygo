@@ -8,7 +8,7 @@ include_directories(
 )
 
 add_library(bygo_lib
-    include/bygo.hpp
+    include/bygo/bygo.hpp
 )
 set_target_properties(bygo_lib PROPERTIES LINKER_LANGUAGE CXX)
 
@@ -39,5 +39,7 @@ target_link_libraries(${PROJECT_NAME}
     bygo_shape
     bygo_elem
 )
+
+# TEST
 
 add_subdirectory(tests)

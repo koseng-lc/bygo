@@ -138,6 +138,9 @@ public:
 
 namespace aux{
 
+/**
+ *  @brief Compare two basic_elem whether it is equal (in terms of scalar type and its elements) or not
+ */ 
 namespace impl{
 
     template <typename shape_t, typename obj1_t, typename obj2_t, std::size_t... I, typename ...axes_t>
@@ -174,6 +177,51 @@ constexpr auto is_equal(obj1_t&& obj1, obj2_t&& obj2){
         using Is = std::make_index_sequence<shape_type::dim>;
 
         return impl::is_elem_wise_equal<typename shape_type::res_shape>(std::forward<obj1_t>(obj1), std::forward<obj2_t>(obj2), Is{});
+    }else{
+
+        return false;
+    }
+}
+
+/**
+ *  @brief Compare two basic_elem whether it is approximate each other or not
+ */ 
+namespace impl{
+
+    template <typename shape_t, typename obj1_t, typename obj2_t, typename tol_t, std::size_t... I, typename ...axes_t>
+    constexpr auto _is_elem_wise_approx(obj1_t&& obj1, obj2_t&& obj2, tol_t tol, std::index_sequence<I...>, axes_t... axes){
+
+        if(aux::is_scalar_v<util::remove_cvref_t<decltype(obj1(axes...))>>){
+
+            return abs(obj1(axes...) - obj2(axes...)) < tol;
+        }else{
+
+            using Is = std::make_index_sequence<shape_t::dim>;
+
+            return (_is_elem_wise_approx<typename shape_t::res_shape>(std::forward<obj1_t>(obj1), std::forward<obj2_t>(obj2), tol, Is{}, axes..., I) && ...);
+        }
+    }
+
+    template <typename shape_t, typename obj1_t, typename obj2_t, typename tol_t, std::size_t... I>
+    constexpr auto is_elem_wise_approx(obj1_t&& obj1, obj2_t&& obj2, tol_t tol, std::index_sequence<I...>){
+
+        using Is = std::make_index_sequence<shape_t::dim>;
+
+        return (_is_elem_wise_approx<typename shape_t::res_shape>(std::forward<obj1_t>(obj1), std::forward<obj2_t>(obj2), tol, Is{}, I) && ...);
+    }
+}
+
+template <typename obj1_t, typename obj2_t, typename tol_t>
+constexpr auto is_approx(obj1_t&& obj1, obj2_t&& obj2, tol_t tol){
+
+    // Simultaneously check the size and its scalar type
+    if(std::is_same_v<util::remove_cvref_t<obj1_t>, util::remove_cvref_t<obj2_t>>){
+
+        // If the type is not equal, we don't need to evaluate this
+        using shape_type = typename util::remove_cvref_t<obj1_t>::shape_type;
+        using Is = std::make_index_sequence<shape_type::dim>;
+
+        return impl::is_elem_wise_approx<typename shape_type::res_shape>(std::forward<obj1_t>(obj1), std::forward<obj2_t>(obj2), tol, Is{});
     }else{
 
         return false;
