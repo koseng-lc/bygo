@@ -1,7 +1,7 @@
 # BYGO - Before You Go
 ![Logo](bygo-logo.png)
 
-BYGO is a linear algebra tools which available in compile time expression written in C++. The main purpose of this library is reducing the runtime process as possible.
+BYGO is a linear algebra tools which available in compile time expressions written in C++. The main purpose of this library is reducing the runtime process as possible.
 
 ## Example
 ```cpp
