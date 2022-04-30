@@ -170,7 +170,7 @@ int main(int argc, char** argv){
         std::cout << "Matrix Cols. Size: " << matrix_t::ncols << std::endl;
         std::cout << "Matrix Rows. Size: " << matrix_t::nrows << std::endl;
 
-        bygo::util::print_matrix(m);
+        bygo::util::print(m);
 
         // auto m2_t(bygo::op::transpose(m));
         // constexpr auto m_t(bygo::op::transpose(m));
@@ -179,11 +179,11 @@ int main(int argc, char** argv){
         // std::cout << "Matrix_T Cols. Size: " << m_t_cols << std::endl;
         // std::cout << "Matrix_T Rows. Size: " << m_t_rows << std::endl;
 
-        // bygo::util::print_matrix(m_t);
+        // bygo::util::print(m_t);
 
         // constexpr auto m_sym(bygo::op::dot(m, m_t));
         // std::cout << "======" << std::endl;
-        // bygo::util::print_matrix(m_sym);
+        // bygo::util::print(m_sym);
 
         // constexpr auto x = IS_CONSTEXPR(bygo::op::transpose(m_t));
         // constexpr auto y = IS_CONSTEXPR(bygo::op::transpose(m2_t));
@@ -192,7 +192,7 @@ int main(int argc, char** argv){
         // std::cerr << "Compile-time: " << y << std::endl;
 
         // std::cout << "======M2" << std::endl;
-        // bygo::util::print_matrix(m2);
+        // bygo::util::print(m2);
 
         // auto m3(m);
         // // m3(0) = m2(1);
@@ -210,14 +210,16 @@ int main(int argc, char** argv){
         }});
 
         // // constexpr auto m_swapped(bygo::op::swap_elem(m, std::make_tuple(1), std::make_tuple(2)));
-        // // bygo::util::print_matrix(m_swapped);
+        // // bygo::util::print(m_swapped);
         // auto m_add(bygo::op::add(m, m2, std::make_tuple(1), std::make_tuple(0)));
         // // std::cout << "====== Add sub:" << std::endl;
-        // // bygo::util::print_matrix(m_add);
+        // // bygo::util::print(m_add);
 
         constexpr auto m_inv(bygo::op::inv(m_inv_target));
         std::cout << "M_inv" << std::endl;
-        bygo::util::print_matrix(m_inv);
+        bygo::util::print(m_inv);
+
+        bygo::util::print(m2);
 
         // auto m_concat(bygo::op::concat<1>(m_rref, m2));
         // bygo::util::print(m_concat);
