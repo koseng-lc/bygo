@@ -28,17 +28,14 @@ public:
         return data_[i];
     }
 
-    // constexpr auto operator=(){
-
-    // }
-
     /**
      *  @brief Element getter using parentheses
      */ 
 public:
     template <typename _Ax, typename ..._Axs>
-    constexpr inline auto operator()(_Ax _ax, _Axs... _axs) const{
-        static_assert(sizeof...(_axs) + 1 <= shape_t::size, "[basic_elem] Number of axis is too much.");
+    constexpr inline decltype(auto) operator()(_Ax _ax, _Axs... _axs) const{
+
+        static_assert(sizeof...(_axs) + 1 <= shape_t::size, "[bygo::basic_elem] Number of axis is too much.");
 
         using Is = std::make_index_sequence<sizeof...(_Axs)+1>;
 
@@ -46,8 +43,9 @@ public:
     }
 
     template <typename _Ax, typename = std::enable_if_t<util::is_integral_constant_v<_Ax>>>
-    constexpr inline auto operator()(_Ax&& _ax) const{
-        // static_assert(sizeof...(_axs) + 1 <= shape_t::size, "[basic_elem] Number of axis is too much.");
+    constexpr inline decltype(auto) operator()(_Ax&& _ax) const{
+
+        static_assert((0 <= _ax) & (_ax < shape_t::nelem), "[bygo::basic_elem] Index out of bounds.");
 
         using Is = aux::to_multi_t<shape_type, _Ax::value>;
         
@@ -60,22 +58,23 @@ private:
         using Is = std::make_index_sequence<sizeof...(I)>;
 
         return this->at(std::forward_as_tuple(I...), Is{});
-
-        // return this->reverse_at(I...);
     }
 
     template <typename tup_t, std::size_t ...I>
     constexpr inline auto at(tup_t&& _tup, std::index_sequence<I...>) const{
+
         return this->reverse_at(std::get<(sizeof...(I)-1)-I>(_tup)...);
     }
 
     template <typename _Ax, typename ..._Axs>
     constexpr inline auto reverse_at(_Ax _ax, _Axs... _axs) const{
+
         return this->reverse_at(_axs...)[_ax];
     }
 
     template <typename _Ax>
     constexpr inline auto reverse_at(_Ax _ax) const{
+
         return (*this)[_ax];
     }
 
@@ -84,8 +83,9 @@ private:
      */ 
 public:
     template <typename _Ax, typename ..._Axs>
-    constexpr inline auto& operator()(_Ax _ax, _Axs... _axs){
-        static_assert(sizeof...(_axs) + 1 <= shape_t::size, "[basic_elem] Number of axis is too much.");
+    constexpr inline decltype(auto) operator()(_Ax _ax, _Axs... _axs){
+
+        static_assert(sizeof...(_axs) + 1 <= shape_t::size, "[bygo::basic_elem] Number of axis is too much.");
 
         using Is = std::make_index_sequence<sizeof...(_Axs)+1>;
 
@@ -93,8 +93,9 @@ public:
     }
 
     template <typename _Ax, typename = std::enable_if_t<util::is_integral_constant_v<_Ax>>>
-    constexpr inline auto& operator()(_Ax&& _ax){
-        // static_assert(sizeof...(_axs) + 1 <= shape_t::size, "[basic_elem] Number of axis is too much.");
+    constexpr inline decltype(auto) operator()(_Ax&& _ax){
+
+        static_assert((0 <= _ax) & (_ax < shape_t::nelem), "[bygo::basic_elem] Index out of bounds.");
 
         using Is = aux::to_multi_t<shape_type, _Ax::value>;
 
@@ -104,31 +105,35 @@ public:
 private:
     template <std::size_t ...I>
     constexpr inline auto& tup_to_at(std::index_sequence<I...>){
+
         using Is = std::make_index_sequence<sizeof...(I)>;
 
         return this->at(std::forward_as_tuple(I...), Is{});
-        // return this->reverse_at(I...);
     }
 
     template <typename tup_t, std::size_t ...I>
     constexpr inline auto& at(tup_t&& _tup, std::index_sequence<I...>){
+
         return this->reverse_at(std::get<(sizeof...(I)-1)-I>(_tup)...);
     }
 
     template <typename _Ax, typename ..._Axs>
     constexpr inline auto& reverse_at(_Ax _ax, _Axs... _axs){
+
         return this->reverse_at(_axs...)[_ax];
     }
 
     template <typename _Ax>
     constexpr inline auto& reverse_at(_Ax _ax){
+
         return (*this)[_ax];
     }
     
 public:
     template <typename op_t>
     constexpr auto operator+(op_t&& _op){
-        static_assert(aux::is_shape_equal_v<shape_type, typename util::remove_cvref_t<op_t>::shape_type>, "[basic_elem] Shape must be the same!");
+
+        static_assert(aux::is_shape_equal_v<shape_type, typename util::remove_cvref_t<op_t>::shape_type>, "[bygo::basic_elem] Shape must be the same!");
 
         return op::add((*this), std::forward<op_t>(_op));
     }
