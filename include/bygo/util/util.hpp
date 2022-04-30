@@ -1,6 +1,18 @@
 #ifndef BYGO_UTIL_UTIL_HPP
 #define BYGO_UTIL_UTIL_HPP
 
+/**
+ * @note Since C++17, the lambda expression is support constexpr
+ */
+#define BYGO_K(...) \
+    [](){return __VA_ARGS__;}
+
+#define BYGO_IVAL(...) \
+    [](){return std::pair<int, int>{__VA_ARGS__};}
+
+#define BYGO_IVAL_ALL() \
+    BYGO_IVAL(-1, -1)
+
 namespace bygo::util{
 
     /**

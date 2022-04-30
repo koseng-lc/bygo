@@ -14,7 +14,7 @@ namespace impl{
     constexpr auto inv(in_t&& in, out_t&& out){
 
         auto iden(::bygo::ctype::eye(std::forward<in_t>(in)));
-        auto aug(::bygo::op::concat<1>(std::forward<in_t>(in), iden));
+        auto aug(::bygo::op::concat(std::forward<in_t>(in), iden, BYGO_K(1)));
         auto rref_res(::bygo::op::rref(aug));
 
         using rref_type = decltype(rref_res);

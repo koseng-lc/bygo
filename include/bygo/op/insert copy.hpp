@@ -65,23 +65,23 @@ namespace impl{
     }
 }
 
-template <typename in_t, typename op_t, typename index_t, typename axis_t, typename ...op_axes_t>
-constexpr auto insert(in_t&& in, op_t&& op, index_t&& index, axis_t&& axis, std::tuple<op_axes_t...> op_axes){
+template <std::size_t index, std::size_t axis, typename in_t, typename op_t, typename ...axes_t>
+constexpr auto insert(in_t&& in, op_t&& op, std::tuple<axes_t...> axes){
 
     using in_type = util::remove_cvref_t<in_t>;
     using in_shape = typename in_type::shape_type;
 
-    using out_shape = aux::add_nth_shape_t<axis(), 1, in_shape>;
+    using out_shape = aux::add_nth_shape_t<axis, 1, in_shape>;
     using out_type = basic_elem<out_shape, typename in_type::scalar_type>;
 
-    using res_shape = aux::nth_shape_t<in_shape, axis()+1>;
+    using res_shape = aux::nth_shape_t<in_shape, axis+1>;
     using op_shape = typename util::remove_cvref_t<op_t>::shape_type;
 
     // static_assert(aux::is_shape_equal_v<res_shape, op_shape>, "[insert] The target shape is not compatible.");
 
     out_type res{};
-    impl::insert<index(), axis(), typename out_shape::res_shape>(std::forward<in_t>(in), std::forward<op_t>(op), res
-        , op_axes, std::make_index_sequence<sizeof...(op_axes_t)>{}
+    impl::insert<index, axis, typename out_shape::res_shape>(std::forward<in_t>(in), std::forward<op_t>(op), res
+        , axes, std::make_index_sequence<sizeof...(axes_t)>{}
         , std::make_index_sequence<out_shape::dim>{});
 
     return res;

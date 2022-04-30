@@ -127,15 +127,15 @@ int main(int argc, char** argv){
         std::cout << "Assign:" << std::endl;
         bygo::util::print(t_assign);
 
-        constexpr auto t_ins(bygo::op::insert<1, 1>(t2, t, std::make_tuple(0,1)));
+        constexpr auto t_ins(bygo::op::insert(t2, t, BYGO_K(1), BYGO_K(1), std::make_tuple(0,1)));
         std::cout << "Insert:" << std::endl;
         bygo::util::print(t_ins);
 
-        constexpr auto t_stack(bygo::op::stack<1>(t, t2));
+        constexpr auto t_stack(bygo::op::stack(t, t2, BYGO_K(1)));
         std::cout << "Stack:" << std::endl;
         bygo::util::print(t_stack);
 
-        constexpr auto t_concat(bygo::op::concat<3>(t, t2));
+        constexpr auto t_concat(bygo::op::concat(t, t2, BYGO_K(3)));
         std::cout << "Concat:" << std::endl;
         bygo::util::print(t_concat);
 
