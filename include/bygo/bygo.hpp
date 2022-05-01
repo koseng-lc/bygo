@@ -6,5 +6,6 @@
 #include <bygo/ctype.hpp>
 #include <bygo/prop/shape.hpp>
 #include <bygo/util.hpp>
+#include <bygo/random.hpp>
 
 #endif

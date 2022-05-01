@@ -1,0 +1,2 @@
+set(BYGO_INCLUDE_DIR "@CONF_INCLUDE_DIR@")
+include("@CONF_TARGETS_DIR@/bygo-targets.cmake")
