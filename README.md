@@ -29,6 +29,8 @@ int main(int argc, char** argv){
         }
     }};
 
+    bygo::util::print(arr);
+
     return 0;
 }
 ```
