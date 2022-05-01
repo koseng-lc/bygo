@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Logo](bygo-logo.png)
+![Logo](misc/bygo-logo.png)
 </div>
 
 BYGO is a linear algebra tools which available in compile time expressions written in C++. The main purpose of this library is reducing the runtime process as possible.
