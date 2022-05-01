@@ -145,6 +145,10 @@ int main(int argc, char** argv){
 
         std::cout << "Is Equal: " << bygo::aux::is_equal(t, t2) << std::endl;
 
+        auto t_random(bygo::random::gen<bygo::shape<3,2,4,6>>());
+        std::cout << "Random:" << std::endl;
+        bygo::util::print(t_random);
+
         check(bygo::aux::shape_dim_t<decltype(t_slice)::shape_type>{});
     }
 
