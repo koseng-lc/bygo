@@ -24,6 +24,7 @@ namespace impl{
                 out(std::get<J>(axes1)..., axes3...) = fn(in(std::get<J>(axes1)..., axes3...), op(std::get<K>(axes2)..., axes3...));
             }
         }else{
+            
             using Is = std::make_index_sequence<shape_t::dim>;
 
             (_apply<typename shape_t::res_shape>
@@ -44,11 +45,41 @@ namespace impl{
                 out(std::get<J>(axes1)..., axes2...) = fn(in(std::get<J>(axes1)..., axes2...), op(axes2...));
             }
         }else{
+
             using Is = std::make_index_sequence<shape_t::dim>;
 
             (_apply<typename shape_t::res_shape>
                 (std::forward<fn_t>(fn), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out)
                 , Is{}, axes1, std::index_sequence<J...>{}, axes2..., I), ...);
+        }
+    }
+
+    template <typename shape_t, typename fn_t, typename in_t, typename op_t, typename out_t
+        , std::size_t... I, typename ...axes_t>
+    constexpr void _apply(fn_t&& fn, in_t in, op_t op, out_t&& out
+        , std::index_sequence<I...>, axes_t... axes){
+
+        if constexpr(sizeof...(axes_t) > 0){ 
+            if constexpr(aux::is_scalar_v<util::remove_cvref_t<decltype(out(axes...))>>){
+                if constexpr(aux::is_scalar_v<util::remove_cvref_t<op_t>>){
+                    out(axes...) = fn(in(axes...), op);
+                }else{
+                    out(axes...) = fn(in(axes...), op(axes...));
+                }
+            }
+
+            using Is = std::make_index_sequence<shape_t::dim>;
+
+            (_apply<typename shape_t::res_shape>
+                (std::forward<fn_t>(fn), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out)
+                , Is{}, axes..., I), ...);
+        }else{
+
+            using Is = std::make_index_sequence<shape_t::dim>;
+
+            (_apply<typename shape_t::res_shape>
+                (std::forward<fn_t>(fn), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out)
+                , Is{}, axes..., I), ...);
         }
     }
 
@@ -109,6 +140,16 @@ namespace impl{
             , Is{}, axes, std::index_sequence<I...>{});
     }
 
+    template <typename shape_t, typename fn_t, typename in_t, typename op_t, typename out_t>
+    constexpr void apply(fn_t&& fn, in_t&& in, op_t&& op, out_t&& out){
+
+        using Is = std::make_index_sequence<shape_t::dim>;
+
+        _apply<typename shape_t::res_shape>
+            (std::forward<fn_t>(fn), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out)
+            , Is{});
+    }
+
     template <typename shape_t, typename fn_t, typename in_t, typename axes_t, std::size_t... I>
     constexpr void apply(fn_t&& fn, in_t&& in, axes_t axes, std::index_sequence<I...>){
 
@@ -155,6 +196,15 @@ constexpr auto apply(fn_t&& fn, in_t&& in, op_t&& op, out_t&& out, std::tuple<ax
 
     impl::apply<target_out_shape>
         (std::forward<fn_t>(fn), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), axes, Is{});
+}
+
+template <typename fn_t, typename in_t, typename op_t, typename out_t>
+constexpr auto apply(fn_t&& fn, in_t&& in, op_t&& op, out_t&& out){
+
+    using out_shape = typename util::remove_cvref_t<out_t>::shape_type;
+
+    impl::apply<out_shape>
+        (std::forward<fn_t>(fn), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out));
 }
 
 template <typename fn_t, typename in_t, typename ...axes_t>
