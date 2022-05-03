@@ -4,47 +4,42 @@
 
 #include <bygo/bygo.hpp>
 
-template <typename T>
-constexpr void test_helper(T&&){}
-
-#define IS_CONSTEXPR(...) noexcept(test_helper(__VA_ARGS__))
-
-template <std::size_t ...I>
-constexpr auto check(std::index_sequence<I...>){
-    (std::cout << I << " ", ...);
-    std::cout << std::endl;
-}
-
-struct op_apply{
-    template <typename in_t, typename op_t>
-    constexpr auto operator()(in_t&& in, op_t&& op){
-        return in + op;
-    }
-};
-
 int main(int argc, char** argv){
 
     using tensor_stl_t = bygo::basic_elem<bygo::shape<3,2,4,2>, double, true>;
-    using tensor2_t = bygo::basic_elem<bygo::shape<3,2,3>>;
-    using tensor_basic2_t = bygo::basic_elem<bygo::shape<3,2,4,2>>;
-    using tensor_basic3_t = bygo::basic_elem<bygo::shape<2,4,2>>;
-    using tensor_basic4_t = bygo::basic_elem<bygo::shape<4,2>>;
+    using tensor_basic_t = bygo::basic_elem<bygo::shape<3,2,4,2>>;
+    using tensor_basic2_t = bygo::basic_elem<bygo::shape<2,4,2>>;
+    using tensor_basic3_t = bygo::basic_elem<bygo::shape<4,2>>;
 
     {
-        // tensor_stl_t t{{{
-        //     {{
-        //         {{{1,2},{3,4},{5,6},{7,8}}},
-        //         {{{3,4},{1,2},{7,8},{5,6}}}
-        //     }},
-        //     {{
-        //         {{{5,6},{1,2},{7,8},{3,4}}},
-        //         {{{7,8},{3,4},{1,2},{5,6}}}
-        //     }},
-        //     {{
-        //         {{{1,2},{5,6},{3,4},{7,8}}},
-        //         {{{3,4},{1,2},{5,6},{7,8}}}
-        //     }}
-        // }}};
+        // Initialize through the nested initializer
+        constexpr tensor_stl_t t{{{
+            {{
+                {{{1,2},{3,4},{5,6},{7,8}}},
+                {{{3,4},{1,2},{7,8},{5,6}}}
+            }},
+            {{
+                {{{5,6},{1,2},{7,8},{3,4}}},
+                {{{7,8},{3,4},{1,2},{5,6}}}
+            }},
+            {{
+                {{{1,2},{5,6},{3,4},{7,8}}},
+                {{{3,4},{1,2},{5,6},{7,8}}}
+            }}
+        }}};
+
+        // Initialize using brace elision
+        constexpr tensor_stl_t t2{
+                1,2, 3,4, 5,6, 7,8,
+                3,4, 1,2, 7,8, 5,6
+            ,
+                5,6, 1,2, 7,8, 3,4,
+                7,8, 3,4, 1,2, 5,6
+            ,
+                1,2, 5,6, 3,4, 7,8,
+                3,4, 1,2, 5,6, 7,8
+        };
+
         // // Set element-(1,0,1,0)
         // t(0,1,0,1) = 99;
         // // Print element-(1,0,1,0)
@@ -55,7 +50,7 @@ int main(int argc, char** argv){
     }
 
     {
-        constexpr tensor_basic2_t t{{
+        constexpr tensor_basic_t t{{
             {
                 {{1,2},{3,4},{5,6},{7,8}},
                 {{3,4},{1,2},{7,8},{5,6}}
@@ -70,7 +65,7 @@ int main(int argc, char** argv){
             }
         }};
 
-        constexpr tensor_basic2_t t2{{
+        constexpr tensor_basic_t t2{{
             {
                 {{1,2},{3,4},{5,6},{7,8}},
                 {{3,4},{1,2},{7,8},{5,6}}
@@ -85,7 +80,7 @@ int main(int argc, char** argv){
             }
         }};
 
-        constexpr tensor_basic3_t t3{{
+        constexpr tensor_basic2_t t3{{
             {
                 {9,1},{3,4},{5,6},{7,8}
             },
@@ -94,7 +89,7 @@ int main(int argc, char** argv){
             }
         }};
 
-        constexpr tensor_basic4_t t4{{
+        constexpr tensor_basic3_t t4{{
             {1,2},
             {3,4},
             {5,6},
@@ -137,7 +132,7 @@ int main(int argc, char** argv){
         constexpr auto t_concat(bygo::op::concat(t, t2, BYGO_K(3)));
         std::cout << "Concat:" << std::endl;
         bygo::util::print(t_concat);
-
+        
         constexpr auto t_slice(bygo::op::slice(t, BYGO_IVAL(1,1), BYGO_IVAL(0,0), BYGO_IVAL_ALL()));
         std::cout << "Slice:" << std::endl;
         bygo::util::print(t_slice);
@@ -148,7 +143,7 @@ int main(int argc, char** argv){
         // std::cout << "Random:" << std::endl;
         // bygo::util::print(t_random);
 
-        check(bygo::aux::shape_dim_t<decltype(t_slice)::shape_type>{});
+        bygo::util::print_seq(bygo::aux::shape_dim_t<decltype(t_slice)::shape_type>{});
     }
 
     using matrix_t = bygo::matrix<3, 2>;
@@ -222,8 +217,6 @@ int main(int argc, char** argv){
         std::cout << "M_inv" << std::endl;
         bygo::util::print(m_inv);
 
-        bygo::util::print(m2);
-
         // auto m_concat(bygo::op::concat<1>(m_rref, m2));
         // bygo::util::print(m_concat);
 
@@ -232,7 +225,7 @@ int main(int argc, char** argv){
         // }};
         // auto m_ins(bygo::op::insert(m, v, std::make_tuple(1)));
 
-        // check(bygo::aux::shape_dim_t<decltype(m_ins)::shape_type>{});
+        // bygo::util::print_seq(bygo::aux::shape_dim_t<decltype(m_ins)::shape_type>{});
     }
 
     return 0;
