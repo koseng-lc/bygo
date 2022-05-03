@@ -55,6 +55,12 @@ auto print(in_t&& in){
     std::cout << std::endl;
 }
 
+template <std::size_t ...I>
+constexpr auto print_seq(std::index_sequence<I...>){
+    (std::cout << I << " ", ...);
+    std::cout << std::endl;
+}
+
 } // namespace bygo::util
 
 #endif
