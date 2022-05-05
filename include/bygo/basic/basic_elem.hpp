@@ -1,8 +1,6 @@
 #ifndef BYGO_BASIC_ELEM_HPP
 #define BYGO_BASIC_ELEM_HPP
 
-#include <array>
-
 #include <bygo/prop/shape.hpp>
 #include <bygo/op/add.hpp>
 #include <bygo/util/util.hpp>
@@ -50,6 +48,10 @@ public:
         using Is = aux::to_multi_t<shape_type, _Ax::value>;
         
         return this->tup_to_at(Is{});
+    }
+
+    constexpr inline decltype(auto) operator()() const{
+        return std::nullptr_t{};
     }
 
 private:

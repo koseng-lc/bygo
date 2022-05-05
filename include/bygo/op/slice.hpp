@@ -9,16 +9,19 @@ namespace impl{
 
     template <typename arg_t>
     constexpr auto lb(arg_t&& arg){
+        
         return std::get<0>(arg);
     }
 
     template <typename arg_t>
     constexpr auto ub(arg_t&& arg){
+
         return std::get<1>(arg);
     }
 
     template <std::size_t I, typename shape_t, typename ival_t>
     constexpr auto d(ival_t&& ival){
+
         if (ub(ival) < 0 || lb(ival) < 0){
             return (int)aux::nth_shape_dim_v<shape_t, I>;
         }else{
@@ -28,11 +31,13 @@ namespace impl{
 
     template <typename shape_t, std::size_t... I, std::size_t... J, typename ival_t, typename ...ivals_t>
     constexpr auto deduce_shape(std::index_sequence<I...>, std::index_sequence<J...>, ival_t&& ival, ivals_t&&... ivals){
+
         return ::bygo::shape<d<1, shape_t>(ival()), (d<I+2, shape_t>(ivals()))..., aux::nth_shape_dim_v<shape_t, sizeof...(ivals_t) + J + 2>...>{};
     }
 
     template <std::size_t... I, typename ival_t, typename ...ivals_t>
     constexpr auto gen_lower(std::index_sequence<I...>, ival_t&& ival, ivals_t&&... ivals){
+
         return std::make_tuple(((lb(ival()) < 0) ? 0 : lb(ival())), ((lb(ivals()) < 0) ? 0 : lb(ivals()))..., (I - I)...);
     }
 
@@ -50,6 +55,7 @@ namespace impl{
 
     template <typename shape_t, typename in_t, typename out_t, typename lower_t, std::size_t... I, typename ...indices_t>
     constexpr auto slice(in_t&& in, out_t&& out, lower_t&& lower, std::index_sequence<I...>){
+
         using Is = std::make_index_sequence<shape_t::dim>;
         using Js = std::make_index_sequence<util::remove_cvref_t<out_t>::shape_type::size>;
         
@@ -59,6 +65,7 @@ namespace impl{
 
 template <typename in_t, typename ival_t, typename ...ivals_t>
 constexpr auto slice(in_t&& in, ival_t&& ival, ivals_t&&... ivals){
+
     using in_type = util::remove_cvref_t<in_t>;
     using in_shape = typename in_type::shape_type;
     using out_shape = decltype(impl::deduce_shape<in_shape>(std::make_index_sequence<sizeof...(ivals_t)>{}

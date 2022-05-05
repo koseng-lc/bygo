@@ -40,7 +40,7 @@ install(EXPORT bygo_export DESTINATION ${BYGO_CMAKE_CONFIG_INSTALL_PATH}
 )
 
 # Tests
-add_subdirectory(tests)
+# add_subdirectory(tests)
 
 # Examples
 add_subdirectory(examples)

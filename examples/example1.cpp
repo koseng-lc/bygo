@@ -4,7 +4,7 @@
 
 #include <bygo/bygo.hpp>
 
-int main(int argc, char** argv){
+int main(int argc, [[maybe_unused]] char** argv){
 
     using tensor_stl_t = bygo::basic_elem<bygo::shape<3,2,4,2>, double, true>;
     using tensor_basic_t = bygo::basic_elem<bygo::shape<3,2,4,2>>;
@@ -109,41 +109,41 @@ int main(int argc, char** argv){
         // std::cout << "Result1: " << res[0][1][0][1] << std::endl;
         // std::cout << "Result2: " << t[0][1][0][1] << std::endl;
 
-        constexpr auto t_add(bygo::op::add(t, t2, std::make_tuple(0,1,0), std::make_tuple(1,0,0)));
+        constexpr auto t_add(bygo::op::add(t, t2, bygo::ax(0,1,0), bygo::ax(1,0,0)));
         std::cout << "Add:" << std::endl;
         bygo::util::print(t_add);
 
-        constexpr auto t_subtract(bygo::op::subtract(t, t2, std::make_tuple(0,1,0), std::make_tuple(1,0,0)));
-        std::cout << "Subtract:" << std::endl;
-        bygo::util::print(t_subtract);
+        // constexpr auto t_subtract(bygo::op::subtract(t, t2, std::make_tuple(0,1,0), std::make_tuple(1,0,0)));
+        // std::cout << "Subtract:" << std::endl;
+        // bygo::util::print(t_subtract);
 
-        constexpr auto t_assign(bygo::op::assign(t, t2, std::make_tuple(0,0), std::make_tuple(1,0)));
-        std::cout << "Assign:" << std::endl;
-        bygo::util::print(t_assign);
+        // constexpr auto t_assign(bygo::op::assign(t, t2, std::make_tuple(0,0), std::make_tuple(1,0)));
+        // std::cout << "Assign:" << std::endl;
+        // bygo::util::print(t_assign);
 
-        constexpr auto t_ins(bygo::op::insert(t2, t, BYGO_K(1), BYGO_K(1), std::make_tuple(0,1)));
-        std::cout << "Insert:" << std::endl;
-        bygo::util::print(t_ins);
+        // constexpr auto t_ins(bygo::op::insert(t2, t, BYGO_K(1), BYGO_K(1), std::make_tuple(0,1)));
+        // std::cout << "Insert:" << std::endl;
+        // bygo::util::print(t_ins);
 
-        constexpr auto t_stack(bygo::op::stack(t, t2, BYGO_K(1)));
-        std::cout << "Stack:" << std::endl;
-        bygo::util::print(t_stack);
+        // constexpr auto t_stack(bygo::op::stack(t, t2, BYGO_K(1)));
+        // std::cout << "Stack:" << std::endl;
+        // bygo::util::print(t_stack);
 
-        constexpr auto t_concat(bygo::op::concat(t, t2, BYGO_K(3)));
-        std::cout << "Concat:" << std::endl;
-        bygo::util::print(t_concat);
+        // constexpr auto t_concat(bygo::op::concat(t, t2, BYGO_K(3)));
+        // std::cout << "Concat:" << std::endl;
+        // bygo::util::print(t_concat);
         
-        constexpr auto t_slice(bygo::op::slice(t, BYGO_IVAL(1,1), BYGO_IVAL(0,0), BYGO_IVAL_ALL()));
-        std::cout << "Slice:" << std::endl;
-        bygo::util::print(t_slice);
+        // constexpr auto t_slice(bygo::op::slice(t, BYGO_IVAL(1,1), BYGO_IVAL(0,0), BYGO_IVAL_ALL()));
+        // std::cout << "Slice:" << std::endl;
+        // bygo::util::print(t_slice);
 
-        std::cout << "Is Equal: " << bygo::aux::is_equal(t, t2) << std::endl;
+        // std::cout << "Is Equal: " << bygo::aux::is_equal(t, t2) << std::endl;
 
         // auto t_random(bygo::random::gen<bygo::shape<3,4,2,5>>());
         // std::cout << "Random:" << std::endl;
         // bygo::util::print(t_random);
 
-        bygo::util::print_seq(bygo::aux::shape_dim_t<decltype(t_slice)::shape_type>{});
+        // bygo::util::print_seq(bygo::aux::shape_dim_t<decltype(t_slice)::shape_type>{});
     }
 
     using matrix_t = bygo::matrix<3, 2>;
@@ -213,9 +213,9 @@ int main(int argc, char** argv){
         // // std::cout << "====== Add sub:" << std::endl;
         // // bygo::util::print(m_add);
 
-        constexpr auto m_inv(bygo::op::inv(m_inv_target));
-        std::cout << "M_inv" << std::endl;
-        bygo::util::print(m_inv);
+        // constexpr auto m_inv(bygo::op::inv(m_inv_target));
+        // std::cout << "M_inv" << std::endl;
+        // bygo::util::print(m_inv);
 
         // auto m_concat(bygo::op::concat<1>(m_rref, m2));
         // bygo::util::print(m_concat);
