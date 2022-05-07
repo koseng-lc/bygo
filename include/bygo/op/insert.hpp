@@ -30,21 +30,21 @@ namespace impl{
         , typename op_axes_t, std::size_t ...I
         , std::size_t ...J, typename ...axes_t>
     constexpr auto _insert(in_t&& in, op_t&& op, out_t&& out
-        , op_axes_t op_axes, std::index_sequence<I...>
+        , op_axes_t&& op_axes, std::index_sequence<I...>
         , std::index_sequence<J...>, axes_t ...axes){
 
         if constexpr(sizeof...(axes_t)-1 == axis){
             if constexpr(idx < index){
-                out = ::bygo::op::assign(std::forward<out_t>(out), std::forward<in_t>(in), std::make_tuple(axes...), std::make_tuple(axes...));
+                out = ::bygo::op::assign(std::forward<out_t>(out), std::forward<in_t>(in), bygo::ax(axes...), bygo::ax(axes...));
             }else if (idx > index){
-                out = ::bygo::op::assign(std::forward<out_t>(out), std::forward<in_t>(in), std::make_tuple(axes...), after_idx(axes...));
+                out = ::bygo::op::assign(std::forward<out_t>(out), std::forward<in_t>(in), bygo::ax(axes...), after_idx(axes...));
             }else{
-                out = ::bygo::op::assign(std::forward<out_t>(out), std::forward<op_t>(op), std::make_tuple(axes...), std::make_tuple(std::get<I>(op_axes)...));
+                out = ::bygo::op::assign(std::forward<out_t>(out), std::forward<op_t>(op), bygo::ax(axes...), bygo::ax(std::get<I>(op_axes)...));
             }
         }else{
             using Js = std::make_index_sequence<shape_t::dim>;
             (_insert<index, axis, J, typename shape_t::res_shape>(std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out)
-                , op_axes, std::index_sequence<I...>{}
+                , std::forward<op_axes_t>(op_axes), std::index_sequence<I...>{}
                 , Js{}, axes..., J), ...);
         }
     }
@@ -54,19 +54,19 @@ namespace impl{
         , typename op_axes_t, std::size_t ...I
         , std::size_t ...J>
     constexpr auto insert(in_t&& in, op_t&& op, out_t&& out
-        , op_axes_t op_axes, std::index_sequence<I...>
+        , op_axes_t&& op_axes, std::index_sequence<I...>
         , std::index_sequence<J...>){
 
         using Js = std::make_index_sequence<shape_t::dim>;
 
         (_insert<index, axis, J, typename shape_t::res_shape>(std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out)
-            , op_axes, std::index_sequence<I...>{} 
+            , std::forward<op_axes_t>(op_axes), std::index_sequence<I...>{} 
             , Js{}, J), ...);
     }
 }
 
-template <typename in_t, typename op_t, typename index_t, typename axis_t, typename ...op_axes_t>
-constexpr auto insert(in_t&& in, op_t&& op, index_t&& index, axis_t&& axis, std::tuple<op_axes_t...> op_axes){
+template <typename in_t, typename op_t, typename index_t, typename axis_t, typename op_axes_t>
+constexpr auto insert(in_t&& in, op_t&& op, index_t&& index, axis_t&& axis, op_axes_t&& op_axes){
 
     using in_type = util::remove_cvref_t<in_t>;
     using in_shape = typename in_type::shape_type;
@@ -77,16 +77,18 @@ constexpr auto insert(in_t&& in, op_t&& op, index_t&& index, axis_t&& axis, std:
     using res_shape = aux::nth_shape_t<in_shape, axis()+1>;
     using op_shape = typename util::remove_cvref_t<op_t>::shape_type;
 
+    using op_axes_type = util::remove_cvref_t<op_axes_t>;
+
     // static_assert(aux::is_shape_equal_v<res_shape, op_shape>, "[insert] The target shape is not compatible.");
 
     out_type res{};
     impl::insert<index(), axis(), typename out_shape::res_shape>(std::forward<in_t>(in), std::forward<op_t>(op), res
-        , op_axes, std::make_index_sequence<sizeof...(op_axes_t)>{}
+        , std::forward<op_axes_t>(op_axes), std::make_index_sequence<std::tuple_size_v<op_axes_type>>{}
         , std::make_index_sequence<out_shape::dim>{});
 
     return res;
 }
 
-}
+} // namespace bygo::op
 
 #endif

@@ -13,6 +13,15 @@
 #define BYGO_IVAL_ALL() \
     BYGO_IVAL(-1, -1)
 
+/**
+ * @brief Test whether the executed function is at compile time or not
+ * @note Constexpr function is always noexcept
+ */
+template <typename T>
+constexpr void constexpr_test(T&&){}
+
+#define IS_CONSTEXPR(...) noexcept(constexpr_test(__VA_ARGS__))
+
 namespace bygo::util{
 
     /**

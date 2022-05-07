@@ -15,41 +15,21 @@ namespace impl{
         }
     };
 
-    template <typename in_t, typename op_t, typename out_t, typename axes1_t, typename axes2_t, std::size_t ...I>
-    constexpr auto div(in_t&& in, op_t&& op, out_t&& out, axes1_t axes1, axes2_t axes2, std::index_sequence<I...>){
-
-        if constexpr(aux::is_scalar_v<util::remove_cvref_t<op_t>>){
-            ::bygo::op::apply(_div(), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), axes1);
-        }else{
-            ::bygo::op::apply(_div(), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), axes1, axes2);
-        }
+    template <typename in_t, typename op_t, typename out_t, typename axes1_t, typename axes2_t>
+    constexpr auto div(in_t&& in, op_t&& op, out_t&& out, axes1_t&& axes1, axes2_t&& axes2){
+        
+        ::bygo::op::apply(_div(), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out)
+            , std::forward<axes1_t>(axes1), std::forward<axes2_t>(axes2));
     }
 }
 
-template <typename in_t, typename op_t, typename ...axes1_t, typename ...axes2_t, typename Is = std::make_index_sequence<sizeof...(axes1_t)>>
-constexpr auto div(in_t&& in, op_t&& op, std::tuple<axes1_t...> axes1, std::tuple<axes2_t...> axes2){
+template <typename in_t, typename op_t, typename axes1_t = whole_axes_t, typename axes2_t = whole_axes_t>
+constexpr auto div(in_t&& in, op_t&& op, axes1_t&& axes1 = whole_axes_t{}, axes2_t&& axes2 = whole_axes_t{}){
 
     using out_type = util::remove_cvref_t<in_t>;
 
     out_type res(in);
-    impl::div(std::forward<in_t>(in), std::forward<op_t>(op), res, axes1, axes2, Is{});
-
-    return res;
-}
-
-template <typename in_t, typename op_t, typename ...axes_t, typename Is = std::make_index_sequence<sizeof...(axes_t)>>
-constexpr auto div(in_t&& in, op_t&& op, std::tuple<axes_t...> axes){
-
-    return div(std::forward<in_t>(in), std::forward<op_t>(op), axes, axes);
-}
-
-template <typename in_t, typename op_t>
-constexpr auto div(in_t&& in, op_t&& op){
-    
-    using out_type = util::remove_cvref_t<in_t>;
-
-    out_type res(in);
-    apply<typename out_type::shape_type>(impl::_div(), std::forward<in_t>(in), std::forward<op_t>(op), res);
+    impl::div(std::forward<in_t>(in), std::forward<op_t>(op), res, std::forward<axes1_t>(axes1), std::forward<axes2_t>(axes2));
 
     return res;
 }

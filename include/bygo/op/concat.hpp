@@ -15,20 +15,25 @@ namespace impl{
 
     template <std::size_t S, typename ...Ts>
     constexpr auto shift_last(Ts... ts){
+
         using Is = std::make_index_sequence<sizeof...(Ts)>;
+
         return _shift_last<S>(std::forward_as_tuple(ts...), Is{});
     }
 
     template <typename shape_t, std::size_t axis, std::size_t idx, typename in_t, typename op_t, typename out_t, std::size_t ...J, typename ...axes_t>
     constexpr auto _concat(in_t&& in, op_t&& op, out_t&& out, std::index_sequence<J...>, axes_t ...axes){
+
         using Js = std::make_index_sequence<shape_t::dim>;
         using out_shape = typename util::remove_cvref_t<in_t>::shape_type;
+
         constexpr auto curr_dim{aux::nth_shape_dim_v<out_shape, sizeof...(axes_t)>};
+
         if constexpr(sizeof...(axes_t)-1 == axis){
             if constexpr(idx < curr_dim){
-                out = ::bygo::op::assign(std::forward<out_t>(out), std::forward<in_t>(in), std::make_tuple(axes...), std::make_tuple(axes...));
+                out = ::bygo::op::assign(std::forward<out_t>(out), std::forward<in_t>(in), bygo::ax(axes...), bygo::ax(axes...));
             }else{
-                out = ::bygo::op::assign(std::forward<out_t>(out), std::forward<op_t>(op), std::make_tuple(axes...), shift_last<curr_dim>(axes...));
+                out = ::bygo::op::assign(std::forward<out_t>(out), std::forward<op_t>(op), bygo::ax(axes...), shift_last<curr_dim>(axes...));
             }
         }else{
             (_concat<typename shape_t::res_shape, axis, J>(std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), Js{}, axes..., J), ...);
@@ -37,13 +42,16 @@ namespace impl{
 
     template <typename shape_t, std::size_t axis, typename in_t, typename op_t, typename out_t, std::size_t ...I>
     constexpr auto concat(in_t&& in, op_t&& op, out_t&& out, std::index_sequence<I...>){
+
         using Is = std::make_index_sequence<shape_t::dim>;
+
         (_concat<typename shape_t::res_shape, axis, I>(std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), Is{}, I), ...);
     }
 }
 
 template <typename in_t, typename op_t, typename axis_t>
 constexpr auto concat(in_t&& in, op_t&& op, axis_t&& axis){
+
     using in_type = util::remove_cvref_t<in_t>;
     using op_type = util::remove_cvref_t<op_t>;
     using out_shape = aux::add_nth_shape_t<axis(), aux::nth_shape_dim_v<typename op_type::shape_type, axis()+1>, typename in_type::shape_type>;
@@ -57,6 +65,6 @@ constexpr auto concat(in_t&& in, op_t&& op, axis_t&& axis){
     return res;
 }
 
-}
+} // namespace bygo::op
 
 #endif
