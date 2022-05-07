@@ -13,6 +13,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Setup Dependencies
+    - run: |
+        sudo apt install libgtest-dev
+        cd /usr/src/gtest
+        sudo cmake CMakeLists.txt
+        sudo make
+        sudo cp *.a /usr/lib
     - name: Setup Repo
       run: |
         git clone https://github.com/koseng-lc/bygo.git
