@@ -19,7 +19,7 @@ jobs:
         cd /usr/src/gtest
         sudo cmake CMakeLists.txt
         sudo make
-        sudo cp *.a /usr/lib
+        sudo cp lib/*.a /usr/lib
     - name: Setup Repo
       run: |
         git clone https://github.com/koseng-lc/bygo.git
