@@ -100,10 +100,9 @@ namespace impl{
     }
 }
 
-template <typename fn_t, typename in_t, typename op_t, typename out_t, typename axes1_t, typename axes2_t
-        >
+template <typename fn_t, typename in_t, typename op_t, typename out_t, typename axes1_t = whole_axes_t, typename axes2_t = whole_axes_t>
 constexpr auto apply(fn_t&& fn, in_t&& in, op_t&& op, out_t&& out
-                , axes1_t&& axes1 = whole_axes_t{}, axes2_t&& axes2 = whole_axes_t{}){
+                , axes1_t&& axes1 = axes1_t{}, axes2_t&& axes2 = axes2_t{}){
 
     using out_shape = typename util::remove_cvref_t<out_t>::shape_type;
 

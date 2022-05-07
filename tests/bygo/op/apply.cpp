@@ -163,7 +163,7 @@ TEST(apply_test, op){
     
     {
         decltype(e1) e3(e1);
-        bygo::op::apply(apply_op_test_t(), e1, e2, e3, std::make_tuple(0,1), std::make_tuple(1,0));
+        bygo::op::apply(apply_op_test_t(), e1, e2, e3, bygo::ax(0,1), bygo::ax(1,0));
         
         decltype(e3) res{
             {
