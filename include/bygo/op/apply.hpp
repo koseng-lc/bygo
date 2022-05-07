@@ -90,7 +90,7 @@ namespace impl{
     }
 
     template <typename shape_t, typename fn_t, typename in_t, typename op_t, typename out_t, typename axes1_t, typename axes2_t, std::size_t... I, std::size_t... J>
-    constexpr void apply(fn_t&& fn, in_t&& in, op_t&& op, out_t&& out, axes1_t axes1, axes2_t axes2, std::index_sequence<I...>, std::index_sequence<J...>){
+    constexpr auto apply(fn_t&& fn, in_t&& in, op_t&& op, out_t&& out, axes1_t axes1, axes2_t axes2, std::index_sequence<I...>, std::index_sequence<J...>){
 
         using Is = std::make_index_sequence<shape_t::dim>;
 
@@ -107,25 +107,29 @@ constexpr auto apply(fn_t&& fn, in_t&& in, op_t&& op, out_t&& out
     using out_shape = typename util::remove_cvref_t<out_t>::shape_type;
     using op_shape = typename util::remove_cvref_t<op_t>::shape_type;
 
-    // constexpr auto swap_axes{is_whole_axes_v<axes2_t> & (out_shape::dim > op_shape::dim)};
+    constexpr auto swap_axes{is_whole_axes_v<axes2_t> & (out_shape::size < op_shape::size)};
 
-    // using axes1_type = std::conditional_t<!swap_axes, util::remove_cvref_t<axes2_t>, util::remove_cvref_t<axes1_t>>;
-    // using axes2_type = std::conditional_t<swap_axes, util::remove_cvref_t<axes2_t>, util::remove_cvref_t<axes1_t>>;
-    using axes1_type = util::remove_cvref_t<axes1_t>;
-    using axes2_type = util::remove_cvref_t<axes2_t>;
+    using axes1_type = std::conditional_t<swap_axes, util::remove_cvref_t<axes2_t>, util::remove_cvref_t<axes1_t>>;
+    using axes2_type = std::conditional_t<swap_axes, util::remove_cvref_t<axes1_t>, util::remove_cvref_t<axes2_t>>;
+
     constexpr auto axes1_size = std::tuple_size_v<axes1_type>;
     constexpr auto axes2_size = std::tuple_size_v<axes2_type>;
 
-    
     using target_out_shape = aux::nth_shape_t<out_shape, axes1_size + 1>;
     using Is = std::make_index_sequence<axes1_size>;
 
     using target_op_shape = aux::nth_shape_t<op_shape, axes2_size + 1>;
     using Js = std::make_index_sequence<axes2_size>;
 
-    impl::apply<target_out_shape>
-        (std::forward<fn_t>(fn), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out)
-        , std::forward<axes1_t>(axes1), std::forward<axes2_t>(axes2), Is{}, Js{});
+    if constexpr(swap_axes){
+        impl::apply<target_out_shape>
+            (std::forward<fn_t>(fn), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out)
+            , std::forward<axes2_t>(axes2), std::forward<axes1_t>(axes1), Is{}, Js{});
+    }else{
+        impl::apply<target_out_shape>
+            (std::forward<fn_t>(fn), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out)
+            , std::forward<axes1_t>(axes1), std::forward<axes2_t>(axes2), Is{}, Js{});
+    }
 }
 
 } // namespace bygo::op

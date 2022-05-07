@@ -109,7 +109,8 @@ int main(int argc, [[maybe_unused]] char** argv){
         // std::cout << "Result1: " << res[0][1][0][1] << std::endl;
         // std::cout << "Result2: " << t[0][1][0][1] << std::endl;
 
-        constexpr auto t_add(bygo::op::add(t, t2, bygo::ax(0,1,0), bygo::ax(1,0,0)));
+        // constexpr auto t_add(bygo::op::add(t, t2, bygo::ax(0,1,0), bygo::ax(1,0,0)));
+        constexpr auto t_add(bygo::op::add(t, t4, bygo::ax(1,0)));
         std::cout << "Add:" << std::endl;
         bygo::util::print(t_add);
 
