@@ -18,11 +18,12 @@ jobs:
         git clone https://github.com/koseng-lc/bygo.git
         cd bygo
         mkdir build
-        cd build
     - name: Build Repo
       run: |
+        cd bygo/build
         cmake -DBYGO_INSTALL_PREFIX=/opt ..
         make -j2
     - name: Install
       run: |
+        cd bygo/build
         sudo make install
