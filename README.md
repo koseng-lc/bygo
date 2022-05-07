@@ -1,4 +1,4 @@
-# BYGO - Before You Go
+# BYGO - Before You Go [![GitHub Actions C++ Status](https://github.com/koseng-lc/bygo/actions/workflows/build.yml/badge.svg)](https://github.com/davisking/dlib/actions/workflows/build.yml)
 
 <div align="center">
 
