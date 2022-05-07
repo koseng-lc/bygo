@@ -12,7 +12,7 @@ Clone the repository at first.
 ```console
 $ git clone https://github.com/koseng-lc/bygo.git
 ```
-Prepare the build folder and install.
+Prepare the build folder, and then install.
 ```console
 $ cd bygo
 $ mkdir build
