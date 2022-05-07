@@ -16,66 +16,24 @@ namespace impl{
     };
 
     template <typename in_t, typename op_t, typename out_t, typename axes1_t, typename axes2_t>
-    constexpr auto assign(in_t&& in, op_t&& op, out_t&& out, axes1_t axes1, axes2_t axes2){
-        ::bygo::op::apply(_assign(), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), axes1, axes2);
-    }
-
-    template <typename in_t, typename op_t, typename out_t, typename axes_t>
-    constexpr auto assign(in_t&& in, op_t&& op, out_t&& out, axes_t axes){
-        ::bygo::op::apply(_assign(), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), axes);
-        // auto& out_part(out(std::get<I>(axes)...));
-
-        // ::bygo::op::apply<aux::nth_shape_t<typename util::remove_cvref_t<out_t>::shape_type, sizeof...(I)+1>>
-        //     (_assign(), in(std::get<I>(axes)...), std::forward<op_t>(op), out_part);
-    }
-
-    template <typename in_t, typename op_t, typename out_t>
-    constexpr auto assign(in_t&& in, op_t&& op, out_t&& out){
-        // ::bygo::op::apply(_assign(), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), axes1, axes2);
-        // ::bygo::op::apply<typename util::remove_cvref_t<out_t>::shape_type>(_assign(), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out));
+    constexpr auto assign(in_t&& in, op_t&& op, out_t&& out, axes1_t&& axes1, axes2_t&& axes2){
+        
+        ::bygo::op::apply(_assign(), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out)
+            , std::forward<axes1_t>(axes1), std::forward<axes2_t>(axes2));
     }
 }
 
-template <typename in_t, typename op_t, typename ...axes1_t, typename ...axes2_t>
-constexpr auto assign(in_t&& in, op_t&& op, std::tuple<axes1_t...> axes1, std::tuple<axes2_t...> axes2){
+template <typename in_t, typename op_t, typename axes1_t = whole_axes_t, typename axes2_t = whole_axes_t>
+constexpr auto assign(in_t&& in, op_t&& op, axes1_t&& axes1 = whole_axes_t{}, axes2_t&& axes2 = whole_axes_t{}){
+
     using out_type = util::remove_cvref_t<in_t>;
 
     out_type res(in);
-    impl::assign(std::forward<in_t>(in), std::forward<op_t>(op), res, axes1, axes2);
+    impl::assign(std::forward<in_t>(in), std::forward<op_t>(op), res, std::forward<axes1_t>(axes1), std::forward<axes2_t>(axes2));
 
     return res;
 }
 
-template <typename in_t, typename op_t, typename ...axes_t>
-constexpr auto assign(in_t&& in, op_t&& op, std::tuple<axes_t...> axes){
-    using in_type = util::remove_cvref_t<in_t>;
-    using op_type = util::remove_cvref_t<op_t>;
-    
-    // static_assert(aux::is_shape_equal_v<sub_shape, typename op_type::shape_type>, "Shape is equal!");
-    if constexpr(aux::is_shape_equal_v<typename in_type::shape_type, typename op_type::shape_type>){
-        return assign(std::forward<in_t>(in), std::forward<op_t>(op), axes, axes);
-    }else{
-        using sub_shape = aux::nth_shape_t<typename in_type::shape_type, sizeof...(axes_t)>;
-        using out_type = util::remove_cvref_t<in_t>;
-
-        out_type res(in);
-        impl::assign(std::forward<in_t>(in), std::forward<op_t>(op), res, axes);
-
-        return res;
-    }
-    
-}
-
-template <typename in_t, typename op_t>
-constexpr auto assign(in_t&& in, op_t&& op){
-    using out_type = util::remove_cvref_t<in_t>;
-
-    out_type res(in);
-    impl::assign(std::forward<in_t>(in), std::forward<op_t>(op), res);
-
-    return res;
-}
-
-}
+} // namespace bygo::op
 
 #endif

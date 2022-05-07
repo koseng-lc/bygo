@@ -7,18 +7,27 @@ namespace bygo::op{
 
 namespace impl{
 
+    /**
+     * @brief Lower bound
+     */
     template <typename arg_t>
     constexpr auto lb(arg_t&& arg){
         
         return std::get<0>(arg);
     }
 
+    /**
+     * @brief Upper bound
+     */
     template <typename arg_t>
     constexpr auto ub(arg_t&& arg){
 
         return std::get<1>(arg);
     }
 
+    /**
+     * @brief Distance of an interval
+     */
     template <std::size_t I, typename shape_t, typename ival_t>
     constexpr auto d(ival_t&& ival){
 
@@ -29,12 +38,18 @@ namespace impl{
         }        
     }
 
+    /**
+     * @brief Deduce the result shape, the first expansion for segmented axis, the second one for the rest
+     */
     template <typename shape_t, std::size_t... I, std::size_t... J, typename ival_t, typename ...ivals_t>
     constexpr auto deduce_shape(std::index_sequence<I...>, std::index_sequence<J...>, ival_t&& ival, ivals_t&&... ivals){
 
         return ::bygo::shape<d<1, shape_t>(ival()), (d<I+2, shape_t>(ivals()))..., aux::nth_shape_dim_v<shape_t, sizeof...(ivals_t) + J + 2>...>{};
     }
 
+    /**
+     * @brief Generate lower index on each axes
+     */
     template <std::size_t... I, typename ival_t, typename ...ivals_t>
     constexpr auto gen_lower(std::index_sequence<I...>, ival_t&& ival, ivals_t&&... ivals){
 
@@ -80,6 +95,6 @@ constexpr auto slice(in_t&& in, ival_t&& ival, ivals_t&&... ivals){
     return res;
 }
 
-}
+} // namespace bygo::op
 
 #endif

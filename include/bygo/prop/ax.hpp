@@ -26,6 +26,6 @@ constexpr auto ax(Axs ...axs){
     return std::make_tuple(axs...);
 }
 
-}
+} // namespace bygo
 
 #endif

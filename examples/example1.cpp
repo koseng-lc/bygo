@@ -109,34 +109,33 @@ int main(int argc, [[maybe_unused]] char** argv){
         // std::cout << "Result1: " << res[0][1][0][1] << std::endl;
         // std::cout << "Result2: " << t[0][1][0][1] << std::endl;
 
-        // constexpr auto t_add(bygo::op::add(t, t2, bygo::ax(0,1,0), bygo::ax(1,0,0)));
-        constexpr auto t_add(bygo::op::add(t, t4, bygo::ax(1,0)));
+        constexpr auto t_add(bygo::op::add(t, t2, bygo::ax(0,1,0), bygo::ax(1,0,0)));
         std::cout << "Add:" << std::endl;
         bygo::util::print(t_add);
 
-        // constexpr auto t_subtract(bygo::op::subtract(t, t2, std::make_tuple(0,1,0), std::make_tuple(1,0,0)));
-        // std::cout << "Subtract:" << std::endl;
-        // bygo::util::print(t_subtract);
+        constexpr auto t_subtract(bygo::op::subtract(t, t2, bygo::ax(0,1,0), bygo::ax(1,0,0)));
+        std::cout << "Subtract:" << std::endl;
+        bygo::util::print(t_subtract);
 
-        // constexpr auto t_assign(bygo::op::assign(t, t2, std::make_tuple(0,0), std::make_tuple(1,0)));
-        // std::cout << "Assign:" << std::endl;
-        // bygo::util::print(t_assign);
+        constexpr auto t_assign(bygo::op::assign(t, t2, bygo::ax(0,0), bygo::ax(1,0)));
+        std::cout << "Assign:" << std::endl;
+        bygo::util::print(t_assign);
 
-        // constexpr auto t_ins(bygo::op::insert(t2, t, BYGO_K(1), BYGO_K(1), std::make_tuple(0,1)));
-        // std::cout << "Insert:" << std::endl;
-        // bygo::util::print(t_ins);
+        constexpr auto t_ins(bygo::op::insert(t2, t, BYGO_K(1), BYGO_K(1), bygo::ax(0,1)));
+        std::cout << "Insert:" << std::endl;
+        bygo::util::print(t_ins);
 
-        // constexpr auto t_stack(bygo::op::stack(t, t2, BYGO_K(1)));
-        // std::cout << "Stack:" << std::endl;
-        // bygo::util::print(t_stack);
+        constexpr auto t_stack(bygo::op::stack(t, t2, BYGO_K(1)));
+        std::cout << "Stack:" << std::endl;
+        bygo::util::print(t_stack);
 
-        // constexpr auto t_concat(bygo::op::concat(t, t2, BYGO_K(3)));
-        // std::cout << "Concat:" << std::endl;
-        // bygo::util::print(t_concat);
+        constexpr auto t_concat(bygo::op::concat(t, t2, BYGO_K(3)));
+        std::cout << "Concat:" << std::endl;
+        bygo::util::print(t_concat);
         
-        // constexpr auto t_slice(bygo::op::slice(t, BYGO_IVAL(1,1), BYGO_IVAL(0,0), BYGO_IVAL_ALL()));
-        // std::cout << "Slice:" << std::endl;
-        // bygo::util::print(t_slice);
+        constexpr auto t_slice(bygo::op::slice(t, BYGO_IVAL(1,1), BYGO_IVAL(0,0), BYGO_IVAL_ALL()));
+        std::cout << "Slice:" << std::endl;
+        bygo::util::print(t_slice);
 
         // std::cout << "Is Equal: " << bygo::aux::is_equal(t, t2) << std::endl;
 
@@ -184,11 +183,11 @@ int main(int argc, [[maybe_unused]] char** argv){
         // std::cout << "======" << std::endl;
         // bygo::util::print(m_sym);
 
-        // constexpr auto x = IS_CONSTEXPR(bygo::op::transpose(m_t));
-        // constexpr auto y = IS_CONSTEXPR(bygo::op::transpose(m2_t));
+        constexpr auto x = IS_CONSTEXPR(bygo::op::transpose(m));
+        constexpr auto y = IS_CONSTEXPR(bygo::op::transpose(m2));
 
-        // std::cerr << "Compile-time: " << x << std::endl;
-        // std::cerr << "Compile-time: " << y << std::endl;
+        std::cerr << "Compile-time: " << x << std::endl;
+        std::cerr << "Compile-time: " << y << std::endl;
 
         // std::cout << "======M2" << std::endl;
         // bygo::util::print(m2);
@@ -208,19 +207,13 @@ int main(int argc, [[maybe_unused]] char** argv){
             {-2,0,3}
         }});
 
-        // // constexpr auto m_swapped(bygo::op::swap_elem(m, std::make_tuple(1), std::make_tuple(2)));
-        // // bygo::util::print(m_swapped);
-        // auto m_add(bygo::op::add(m, m2, std::make_tuple(1), std::make_tuple(0)));
-        // // std::cout << "====== Add sub:" << std::endl;
-        // // bygo::util::print(m_add);
+        constexpr auto m_swapped(bygo::op::swap_elem(m, std::make_tuple(1), std::make_tuple(2)));
+        // bygo::util::print(m_swapped);
 
-        // constexpr auto m_inv(bygo::op::inv(m_inv_target));
-        // std::cout << "M_inv" << std::endl;
-        // bygo::util::print(m_inv);
-
-        // auto m_concat(bygo::op::concat<1>(m_rref, m2));
-        // bygo::util::print(m_concat);
-
+        constexpr auto m_inv(bygo::op::inv(m_inv_target));
+        std::cout << "M_inv" << std::endl;
+        bygo::util::print(m_inv);
+        
         // vec_t v{{
         //     1,2
         // }};
