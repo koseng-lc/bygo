@@ -21,8 +21,11 @@ namespace impl{
             return uni_int_distrib(mt_gen);
         }
     };
-}
+} // namespace impl
 
+/**
+ * @note Not yet involve the scalar type
+ */ 
 template <typename shape_t, typename scalar_t = util::default_scalar_t>
 auto gen(){
 
@@ -32,6 +35,6 @@ auto gen(){
     return res;
 }
 
-}
+} // namespace bygo
 
 #endif

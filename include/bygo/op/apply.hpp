@@ -10,6 +10,7 @@
 namespace bygo::op{
 
 namespace impl{
+
     /**
      * @note If we use the universal reference on op_t and in_t, the deduced type include const which cause implicit conversion (?)
      * @todo reduce the boiler plate code
@@ -98,7 +99,7 @@ namespace impl{
             (std::forward<fn_t>(fn), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out)
             , Is{}, std::forward<axes1_t>(axes1), std::forward<axes2_t>(axes2), std::index_sequence<I...>{}, std::index_sequence<J...>{});
     }
-}
+} // namespace impl
 
 template <typename fn_t, typename in_t, typename op_t, typename out_t, typename axes1_t = whole_axes_t, typename axes2_t = whole_axes_t>
 constexpr auto apply(fn_t&& fn, in_t&& in, op_t&& op, out_t&& out

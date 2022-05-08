@@ -76,7 +76,7 @@ namespace impl{
         
         (_slice<typename shape_t::res_shape>(std::forward<in_t>(in), std::forward<out_t>(out), std::forward<lower_t>(lower), Is{}, Js{},  I), ...);
     }
-}
+} // namespace impl
 
 template <typename in_t, typename ival_t, typename ...ivals_t>
 constexpr auto slice(in_t&& in, ival_t&& ival, ivals_t&&... ivals){

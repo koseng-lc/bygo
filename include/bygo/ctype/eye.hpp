@@ -9,8 +9,10 @@
 namespace bygo::ctype{
 
 namespace impl{
+
     template <typename out_t, std::size_t ...J>
     constexpr auto _eye(out_t&& out, std::size_t i, std::index_sequence<J...>){
+
         using out_type = util::remove_cvref_t<out_t>;
         using scalar_type = typename out_type::scalar_type;
 
@@ -19,6 +21,7 @@ namespace impl{
 
     template <std::size_t NC, typename out_t, std::size_t ...I>
     constexpr auto eye(out_t&& out, std::index_sequence<I...>){
+
         using Js = std::make_index_sequence<NC>;
 
         (_eye(std::forward<out_t>(out), I, Js{}), ...);
@@ -27,6 +30,7 @@ namespace impl{
 
 template <std::size_t NR, std::size_t NC, typename scalar_t = util::default_scalar_t>
 constexpr auto eye(){
+
     using out_type = matrix<NR, NC, scalar_t>;
     using Is = std::make_index_sequence<NR>;
 
@@ -34,10 +38,11 @@ constexpr auto eye(){
     impl::eye<NC>(res, Is{});
 
     return res;
-}
+} // namespace impl
 
 template <typename in_t>
 constexpr auto eye(in_t&& in){
+    
     using out_type = util::remove_cvref_t<in_t>;
     using Is = std::make_index_sequence<out_type::nrows>;
 
@@ -47,6 +52,6 @@ constexpr auto eye(in_t&& in){
     return res;
 }
 
-}
+} // namespace bygo::ctype
 
 #endif

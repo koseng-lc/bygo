@@ -47,7 +47,7 @@ namespace impl{
 
         (_concat<typename shape_t::res_shape, axis, I>(std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out), Is{}, I), ...);
     }
-}
+} // namespace impl
 
 template <typename in_t, typename op_t, typename axis_t>
 constexpr auto concat(in_t&& in, op_t&& op, axis_t&& axis){

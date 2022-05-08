@@ -24,7 +24,7 @@ namespace impl{
 
         out = bygo::op::slice(rref_res, BYGO_IVAL_ALL(), BYGO_IVAL(rref_cols*.5, rref_cols-1));
     }
-}
+} // namespace impl
 
 template <typename in_t>
 constexpr auto inv(in_t&& in){
@@ -37,6 +37,6 @@ constexpr auto inv(in_t&& in){
     return res;
 }
 
-}
+} // namespace bygo::op
 
 #endif

@@ -11,6 +11,7 @@ using uint_t = unsigned int;
 
 template <std::size_t d, std::size_t ...ds>
 struct shape{
+
     static constexpr std::size_t size{sizeof...(ds) + 1};
     using res_shape = shape<ds...>;
     static constexpr std::size_t dim{d};
@@ -19,6 +20,7 @@ struct shape{
 
 template <std::size_t d>
 struct shape<d>{
+
     static constexpr std::size_t size{1};
     using res_shape = shape<0>;
     static constexpr std::size_t dim{d};
@@ -110,9 +112,11 @@ namespace impl{
 
 template <std::size_t N, std::size_t V, typename shape_t>
 struct set_nth_shape{
+
 private:
     using Is = shape_dim_t<shape_t>;
     using Js = std::make_index_sequence<shape_t::size>;
+    
 public:
     using type = decltype(impl::set_nth_shape<N, V>(Is{}, Js{}));
 };
@@ -133,9 +137,11 @@ namespace impl{
 
 template <std::size_t N, std::size_t V, typename shape_t>
 struct add_nth_shape{
+
 private:
     using Is = shape_dim_t<shape_t>;
     using Js = std::make_index_sequence<shape_t::size>;
+    
 public:
     using type = decltype(impl::add_nth_shape<N, V>(Is{}, Js{}));
 };
@@ -150,6 +156,7 @@ using add_nth_shape_t = typename add_nth_shape<N, V, shape_t>::type;
 namespace impl{
    template <auto N, std::size_t V, std::size_t I, typename shape_t, std::size_t ...D>
     struct insert_axis{
+
         static constexpr auto put_here{(I == N) & (V != -1)};
         using type = typename insert_axis<N, (put_here ? -1 : V), I+1, std::conditional_t<put_here, shape_t, typename shape_t::res_shape>, D..., (put_here ? V : shape_t::dim)>::type;
     };
@@ -270,8 +277,8 @@ constexpr auto to_multi_arg(idx_t&& idx){
     return to_multi_t<shape_t, idx_t::value>{};
 }
 
-}
+} // namespace aux
 
-}
+} // namespace bygo
 
 #endif

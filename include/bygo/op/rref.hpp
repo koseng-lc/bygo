@@ -80,7 +80,7 @@ namespace impl{
 
         util::for_loop<nrows>(rref_sub1(), std::forward<in_t>(in), std::forward<out_t>(out), std::forward<std::size_t>(lead));
     }
-}
+} // namespace impl
 
 template <typename in_t>
 constexpr auto rref(in_t&& in){
@@ -93,6 +93,6 @@ constexpr auto rref(in_t&& in){
     return res;
 }
 
-}
+} // namespace bygo::op
 
 #endif

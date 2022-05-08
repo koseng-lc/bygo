@@ -235,7 +235,7 @@ constexpr auto is_approx(obj1_t&& obj1, obj2_t&& obj2, tol_t tol){
     }
 }
 
-}
+} // namespace aux
 
 } // namespace bygo
 

@@ -25,6 +25,6 @@ public:
 
 };
 
-}
+} // namespace bygo
 
 #endif

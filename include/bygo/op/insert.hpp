@@ -63,7 +63,7 @@ namespace impl{
             , std::forward<op_axes_t>(op_axes), std::index_sequence<I...>{} 
             , Js{}, J), ...);
     }
-}
+} // namespace impl
 
 template <typename in_t, typename op_t, typename index_t, typename axis_t, typename op_axes_t>
 constexpr auto insert(in_t&& in, op_t&& op, index_t&& index, axis_t&& axis, op_axes_t&& op_axes){

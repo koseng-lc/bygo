@@ -8,6 +8,7 @@
 namespace bygo::op{
 
 namespace impl{
+    
     struct _assign{
         template <typename in_t, typename op_t>
         constexpr auto operator()(in_t in, op_t op) -> std::common_type_t<util::remove_cvref_t<in_t>, util::remove_cvref_t<op_t>>{
@@ -21,7 +22,7 @@ namespace impl{
         ::bygo::op::apply(_assign(), std::forward<in_t>(in), std::forward<op_t>(op), std::forward<out_t>(out)
             , std::forward<axes1_t>(axes1), std::forward<axes2_t>(axes2));
     }
-}
+} // namespace impl
 
 template <typename in_t, typename op_t, typename axes1_t = whole_axes_t, typename axes2_t = whole_axes_t>
 constexpr auto assign(in_t&& in, op_t&& op, axes1_t&& axes1 = whole_axes_t{}, axes2_t&& axes2 = whole_axes_t{}){

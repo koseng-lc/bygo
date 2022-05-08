@@ -8,6 +8,7 @@
 namespace bygo::op{
 
 namespace impl{
+    
     struct fill{
         template <typename in_t, typename op_t>
         constexpr auto operator()(in_t&& in, op_t&& op) -> std::common_type_t<in_t, op_t>{
@@ -15,7 +16,7 @@ namespace impl{
             return op;
         }
     };
-}
+} // namespace impl
 
 template <typename in_t, typename op_t>
 constexpr auto fill(in_t&& in, op_t&& op){
