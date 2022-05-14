@@ -17,7 +17,8 @@ namespace impl{
     static std::uniform_int_distribution<> uni_int_distrib(-9, 9);
 
     struct _rand_gen{
-        auto operator()(){
+        template <typename ...args_t>
+        auto operator()(args_t&& ...args){
             return uni_int_distrib(mt_gen);
         }
     };

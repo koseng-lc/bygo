@@ -139,9 +139,9 @@ int main(int argc, [[maybe_unused]] char** argv){
 
         // std::cout << "Is Equal: " << bygo::aux::is_equal(t, t2) << std::endl;
 
-        // auto t_random(bygo::random::gen<bygo::shape<3,4,2,5>>());
-        // std::cout << "Random:" << std::endl;
-        // bygo::util::print(t_random);
+        auto t_random(bygo::random::gen<bygo::shape<3,4,2,5>>());
+        std::cout << "Random:" << std::endl;
+        bygo::util::print(t_random);
 
         // bygo::util::print_seq(bygo::aux::shape_dim_t<decltype(t_slice)::shape_type>{});
     }
@@ -183,11 +183,11 @@ int main(int argc, [[maybe_unused]] char** argv){
         // std::cout << "======" << std::endl;
         // bygo::util::print(m_sym);
 
-        constexpr auto x = IS_CONSTEXPR(bygo::op::transpose(m));
-        constexpr auto y = IS_CONSTEXPR(bygo::op::transpose(m2));
+        // constexpr auto x = IS_CONSTEXPR(bygo::op::transpose(m));
+        // constexpr auto y = IS_CONSTEXPR(bygo::op::transpose(m2));
 
-        std::cerr << "Compile-time: " << x << std::endl;
-        std::cerr << "Compile-time: " << y << std::endl;
+        // std::cerr << "Compile-time: " << x << std::endl;
+        // std::cerr << "Compile-time: " << y << std::endl;
 
         // std::cout << "======M2" << std::endl;
         // bygo::util::print(m2);
@@ -207,7 +207,7 @@ int main(int argc, [[maybe_unused]] char** argv){
             {-2,0,3}
         }});
 
-        constexpr auto m_swapped(bygo::op::swap_elem(m, std::make_tuple(1), std::make_tuple(2)));
+        // constexpr auto m_swapped(bygo::op::swap_elem(m, std::make_tuple(1), std::make_tuple(2)));
         // bygo::util::print(m_swapped);
 
         constexpr auto m_inv(bygo::op::inv(m_inv_target));
