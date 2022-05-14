@@ -139,6 +139,12 @@ constexpr auto apply(fn_t&& fn, in_t&& in, op_t&& op, ops_t&& ...ops, out_t&& ou
     }
 }
 
+template <typename fn_t, typename in_t, typename axes1_t = whole_axes_t, typename axes2_t = whole_axes_t
+        , typename = std::enable_if_t<aux::is_tuple_v<axes1_t>&aux::is_tuple_v<axes2_t>>>
+constexpr auto apply(fn_t&& fn, in_t&& in, axes1_t&& axes1 = axes1_t{}, axes2_t&& axes2 = axes2_t{}){
+    apply(std::forward<fn_t>(fn), std::forward<in_t>(in), 0, std::forward<in_t>(in), std::forward<axes1_t>(axes1), std::forward<axes2_t>(axes2));
+}
+
 } // namespace bygo::op
 
 #endif
