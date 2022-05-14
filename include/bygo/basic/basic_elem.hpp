@@ -12,7 +12,7 @@ template <typename shape_t, typename scalar_t = util::default_scalar_t, auto use
 class basic_elem{
 public:
     
-    using data_t = std::conditional_t<use_stl, aux::make_storage_t<scalar_t, shape_t>, aux::make_storage_basic_t<scalar_t, shape_t>>;
+    using data_type = std::conditional_t<use_stl, aux::make_storage_t<scalar_t, shape_t>, aux::make_storage_basic_t<scalar_t, shape_t>>;
     using shape_type = shape_t;
     using scalar_type = scalar_t;
 
@@ -140,7 +140,7 @@ public:
         return op::add((*this), std::forward<op_t>(_op));
     }
 
-    data_t data_;
+    data_type data_;
 };
 
 namespace aux{

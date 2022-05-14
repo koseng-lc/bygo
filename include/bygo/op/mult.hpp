@@ -25,7 +25,7 @@ namespace impl{
 } // namespace impl
 
 template <typename in_t, typename op_t, typename axes1_t = whole_axes_t, typename axes2_t = whole_axes_t>
-constexpr auto mult(in_t&& in, op_t&& op, axes1_t&& axes1 = whole_axes_t{}, axes2_t&& axes2 = whole_axes_t{}){
+constexpr auto mult(in_t&& in, op_t&& op, axes1_t&& axes1 = axes1_t{}, axes2_t&& axes2 = axes2_t{}){
 
     using out_type = util::remove_cvref_t<in_t>;
 

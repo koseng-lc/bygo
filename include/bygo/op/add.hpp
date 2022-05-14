@@ -10,9 +10,9 @@ namespace bygo::op{
 namespace impl{
     
     struct _add{
-        template <typename in_t, typename op_t>
-        constexpr auto operator()(in_t&& in, op_t&& op) -> std::common_type_t<in_t, op_t>{
-            return in + op;
+        template <typename in_t, typename ...ops_t>
+        constexpr auto operator()(in_t&& in, ops_t&& ...ops) -> std::common_type_t<in_t, ops_t...>{
+            return in + (ops + ...);
         }
     };
 
@@ -25,7 +25,7 @@ namespace impl{
 } // namespace impl
 
 template <typename in_t, typename op_t, typename axes1_t = whole_axes_t, typename axes2_t = whole_axes_t>
-constexpr auto add(in_t&& in, op_t&& op, axes1_t&& axes1 = whole_axes_t{}, axes2_t&& axes2 = whole_axes_t{}){
+constexpr auto add(in_t&& in, op_t&& op, axes1_t&& axes1 = axes1_t{}, axes2_t&& axes2 = axes2_t{}){
 
     using out_type = util::remove_cvref_t<in_t>;
 
