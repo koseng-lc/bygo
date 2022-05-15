@@ -3,7 +3,7 @@
 
 #include <random>
 
-#include <bygo/basic/basic_elem.hpp>
+#include <bygo/basic/entity.hpp>
 
 namespace bygo::random{
 
@@ -30,7 +30,7 @@ namespace impl{
 template <typename shape_t, typename scalar_t = util::default_scalar_t>
 auto gen(){
 
-    basic_elem<shape_t, scalar_t> res{};
+    basic::entity<shape_t, scalar_t> res{};
     bygo::op::apply(impl::_rand_gen(), res);
 
     return res;

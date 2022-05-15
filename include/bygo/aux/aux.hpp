@@ -40,7 +40,7 @@ template <typename _elem_t, typename _shape_t>
 using make_storage_basic_t = typename make_storage_basic<_shape_t::size, _elem_t, _shape_t>::type;
 
 /**
- *  @brief count the number of elements in basic_elem
+ *  @brief count the number of elements in entity
  */ 
 template <std::size_t ..._ds>
 struct nelem{

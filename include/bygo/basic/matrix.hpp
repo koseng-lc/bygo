@@ -1,13 +1,13 @@
 #ifndef BYGO_BASIC_MATRIX_HPP
 #define BYGO_BASIC_MATRIX_HPP
 
-#include <bygo/basic/basic_elem.hpp>
+#include <bygo/basic/entity.hpp>
 #include <bygo/prop/shape.hpp>
 
-namespace bygo{
+namespace bygo::basic{
 
 template <std::size_t rows, std::size_t cols, typename scalar_t = util::default_scalar_t, typename shape_t = shape<rows, cols>>
-class matrix: public basic_elem<shape_t, scalar_t>{
+class matrix: public entity<shape_t, scalar_t>{
 public:
     using transpose_type = matrix<cols, rows, scalar_t>;
 
@@ -18,8 +18,8 @@ public:
 
     }
 
-    constexpr matrix(basic_elem<shape_t, scalar_t> _data)
-        : basic_elem<shape_t, scalar_t>(_data){
+    constexpr matrix(basic::entity<shape_t, scalar_t> _data)
+        : entity<shape_t, scalar_t>(_data){
 
     }
 

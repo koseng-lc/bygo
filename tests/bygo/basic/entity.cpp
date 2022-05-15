@@ -2,10 +2,10 @@
 
 #include <gtest/gtest.h>
 
-TEST(is_equal_test, basic_elem){
-    using basic_elem_t = bygo::basic_elem<bygo::shape<3,2,4,2>>;
+TEST(is_equal_test, entity){
+    using entity_t = bygo::basic::entity<bygo::shape<3,2,4,2>>;
 
-    constexpr basic_elem_t e1{{
+    constexpr entity_t e1{{
         {
             {{1,2},{3,4},{5,6},{7,8}},
             {{3,4},{1,2},{7,8},{5,6}}
@@ -20,7 +20,7 @@ TEST(is_equal_test, basic_elem){
         }
     }};
 
-    constexpr basic_elem_t e2{{
+    constexpr entity_t e2{{
         {
             {{1,2},{3,4},{5,6},{7,8}},
             {{3,4},{1,2},{7,8},{5,6}}
@@ -38,10 +38,10 @@ TEST(is_equal_test, basic_elem){
     ASSERT_TRUE(bygo::aux::is_equal(e1, e2));
 }
 
-TEST(is_approx_test, basic_elem){
-    using basic_elem_t = bygo::basic_elem<bygo::shape<3,2,4,2>>;
+TEST(is_approx_test, entity){
+    using entity_t = bygo::basic::entity<bygo::shape<3,2,4,2>>;
 
-    constexpr basic_elem_t e1{{
+    constexpr entity_t e1{{
         {
             {{1,2},{3,4},{5,6},{7,8}},
             {{3,4},{1,2},{7,8},{5,6}}
@@ -56,7 +56,7 @@ TEST(is_approx_test, basic_elem){
         }
     }};
 
-    constexpr basic_elem_t e2{{
+    constexpr entity_t e2{{
         {
             {{1 + 1e-7,2 + 1e-7},{3 + 1e-7,4 + 1e-7},{5 + 1e-7,6 + 1e-7},{7 + 1e-7,8 + 1e-7}},
             {{3 + 1e-7,4 + 1e-7},{1 + 1e-7,2 + 1e-7},{7 + 1e-7,8 + 1e-7},{5 + 1e-7,6 + 1e-7}}

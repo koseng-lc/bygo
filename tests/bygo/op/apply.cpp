@@ -10,7 +10,7 @@ struct apply_op_test_t{
 };
 
 TEST(apply_test, op){
-   bygo::basic_elem<bygo::shape<3,4,2,5>> e1{
+   bygo::basic::entity<bygo::shape<3,4,2,5>> e1{
         {
             {
                 {

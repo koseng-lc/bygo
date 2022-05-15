@@ -1,5 +1,5 @@
-#ifndef BYGO_BASIC_ELEM_HPP
-#define BYGO_BASIC_ELEM_HPP
+#ifndef BYGO_entity_HPP
+#define BYGO_entity_HPP
 
 #include <bygo/prop/shape.hpp>
 #include <bygo/op/add.hpp>
@@ -8,8 +8,10 @@
 
 namespace bygo{
 
+namespace basic{
+
 template <typename shape_t, typename scalar_t = util::default_scalar_t, auto use_stl=false>
-class basic_elem{
+class entity{
 public:
     
     using data_type = std::conditional_t<use_stl, aux::make_storage_t<scalar_t, shape_t>, aux::make_storage_basic_t<scalar_t, shape_t>>;
@@ -33,7 +35,7 @@ public:
     template <typename _Ax, typename ..._Axs>
     constexpr inline decltype(auto) operator()(_Ax _ax, _Axs... _axs) const{
 
-        static_assert(sizeof...(_axs) + 1 <= shape_t::size, "[bygo::basic_elem] Number of axis is too much.");
+        static_assert(sizeof...(_axs) + 1 <= shape_t::size, "[bygo::basic::entity] Number of axis is too much.");
 
         using Is = std::make_index_sequence<sizeof...(_Axs)+1>;
 
@@ -43,7 +45,7 @@ public:
     template <typename _Ax, typename = std::enable_if_t<util::is_integral_constant_v<_Ax>>>
     constexpr inline decltype(auto) operator()(_Ax&& _ax) const{
 
-        static_assert((0 <= _ax) & (_ax < shape_t::nelem), "[bygo::basic_elem] Index out of bounds.");
+        static_assert((0 <= _ax) & (_ax < shape_t::nelem), "[bygo::basic::entity] Index out of bounds.");
 
         using Is = aux::to_multi_t<shape_type, _Ax::value>;
         
@@ -87,7 +89,7 @@ public:
     template <typename _Ax, typename ..._Axs>
     constexpr inline decltype(auto) operator()(_Ax _ax, _Axs... _axs){
 
-        static_assert(sizeof...(_axs) + 1 <= shape_t::size, "[bygo::basic_elem] Number of axis is too much.");
+        static_assert(sizeof...(_axs) + 1 <= shape_t::size, "[bygo::basic::entity] Number of axis is too much.");
 
         using Is = std::make_index_sequence<sizeof...(_Axs)+1>;
 
@@ -97,7 +99,7 @@ public:
     template <typename _Ax, typename = std::enable_if_t<util::is_integral_constant_v<_Ax>>>
     constexpr inline decltype(auto) operator()(_Ax&& _ax){
 
-        static_assert((0 <= _ax) & (_ax < shape_t::nelem), "[bygo::basic_elem] Index out of bounds.");
+        static_assert((0 <= _ax) & (_ax < shape_t::nelem), "[bygo::basic::entity] Index out of bounds.");
 
         using Is = aux::to_multi_t<shape_type, _Ax::value>;
 
@@ -135,7 +137,7 @@ public:
     template <typename op_t>
     constexpr auto operator+(op_t&& _op){
 
-        static_assert(aux::is_shape_equal_v<shape_type, typename util::remove_cvref_t<op_t>::shape_type>, "[bygo::basic_elem] Shape must be the same!");
+        static_assert(aux::is_shape_equal_v<shape_type, typename util::remove_cvref_t<op_t>::shape_type>, "[bygo::basic::entity] Shape must be the same!");
 
         return op::add((*this), std::forward<op_t>(_op));
     }
@@ -143,10 +145,12 @@ public:
     data_type data_;
 };
 
+}
+
 namespace aux{
 
 /**
- *  @brief Compare two basic_elem whether it is equal (in terms of scalar type and its elements) or not
+ *  @brief Compare two entity whether it is equal (in terms of scalar type and its elements) or not
  */ 
 namespace impl{
 
@@ -191,7 +195,7 @@ constexpr auto is_equal(obj1_t&& obj1, obj2_t&& obj2){
 }
 
 /**
- *  @brief Compare two basic_elem whether it is approximate each other or not
+ *  @brief Compare two entity whether it is approximate each other or not
  */ 
 namespace impl{
 

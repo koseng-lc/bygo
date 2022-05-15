@@ -6,10 +6,10 @@
 
 int main(int argc, [[maybe_unused]] char** argv){
 
-    using tensor_stl_t = bygo::basic_elem<bygo::shape<3,2,4,2>, double, true>;
-    using tensor_basic_t = bygo::basic_elem<bygo::shape<3,2,4,2>>;
-    using tensor_basic2_t = bygo::basic_elem<bygo::shape<2,4,2>>;
-    using tensor_basic3_t = bygo::basic_elem<bygo::shape<4,2>>;
+    using tensor_stl_t = bygo::basic::entity<bygo::shape<3,2,4,2>, double, true>;
+    using tensor_basic_t = bygo::basic::entity<bygo::shape<3,2,4,2>>;
+    using tensor_basic2_t = bygo::basic::entity<bygo::shape<2,4,2>>;
+    using tensor_basic3_t = bygo::basic::entity<bygo::shape<4,2>>;
 
     {
         // Initialize through the nested initializer
@@ -146,10 +146,10 @@ int main(int argc, [[maybe_unused]] char** argv){
         // bygo::util::print_seq(bygo::aux::shape_dim_t<decltype(t_slice)::shape_type>{});
     }
 
-    using matrix_t = bygo::matrix<3, 2>;
-    using matrix_rref_t = bygo::matrix<3, 4>;
-    using matrix_sqr_t = bygo::matrix<3, 3>;
-    using vec_t = bygo::basic_elem<bygo::shape<2>>;
+    using matrix_t = bygo::basic::matrix<3, 2>;
+    using matrix_rref_t = bygo::basic::matrix<3, 4>;
+    using matrix_sqr_t = bygo::basic::matrix<3, 3>;
+    using vec_t = bygo::basic::entity<bygo::shape<2>>;
     {
         constexpr matrix_t m({{
             {1,2},

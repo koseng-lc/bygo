@@ -1,7 +1,7 @@
 #ifndef BYGO_OP_STACK_HPP
 #define BYGO_OP_STACK_HPP
 
-#include <bygo/basic/basic_elem.hpp>
+#include <bygo/basic/entity.hpp>
 #include <bygo/prop/shape.hpp>
 
 namespace bygo::op{
@@ -70,7 +70,7 @@ constexpr auto stack(in_t&& in, op_t&& op, axis_t&& axis){
 
     using in_type = util::remove_cvref_t<in_t>;
     using out_shape = aux::insert_axis_t<axis(), 2, typename in_type::shape_type>;
-    using out_type = basic_elem<out_shape, typename in_type::scalar_type>;
+    using out_type = basic::entity<out_shape, typename in_type::scalar_type>;
 
     using Is = std::make_index_sequence<out_shape::dim>;
 

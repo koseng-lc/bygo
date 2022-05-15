@@ -44,7 +44,7 @@ constexpr auto dot(in_t&& in, op_t&& op){
 
     using in_type = util::remove_cvref_t<in_t>;
     using op_type = util::remove_cvref_t<op_t>;
-    using out_type = ::bygo::matrix<in_type::nrows, op_type::ncols, typename in_type::scalar_type>;
+    using out_type = basic::matrix<in_type::nrows, op_type::ncols, typename in_type::scalar_type>;
 
     out_type res;
     impl::dot(std::forward<in_t>(in), std::forward<op_t>(op), res);

@@ -37,7 +37,7 @@ target_link_libraries(_YOUR_PROJECT_NAME_
 
 int main(int argc, char** argv){
     
-    using ndarray_t = bygo::basic_elem<bygo::shape<3,2,4,2>>;
+    using ndarray_t = bygo::basic::entity<bygo::shape<3,2,4,2>>;
 
     ndarray_t arr{{
         {

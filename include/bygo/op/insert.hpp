@@ -1,7 +1,7 @@
 #ifndef BYGO_OP_INSERT_HPP
 #define BYGO_OP_INSERT_HPP
 
-#include <bygo/basic/basic_elem.hpp>
+#include <bygo/basic/entity.hpp>
 #include <bygo/op/assign.hpp>
 #include <bygo/prop/shape.hpp>
 #include <bygo/aux/aux.hpp>
@@ -72,7 +72,7 @@ constexpr auto insert(in_t&& in, op_t&& op, index_t&& index, axis_t&& axis, op_a
     using in_shape = typename in_type::shape_type;
 
     using out_shape = aux::add_nth_shape_t<axis(), 1, in_shape>;
-    using out_type = basic_elem<out_shape, typename in_type::scalar_type>;
+    using out_type = basic::entity<out_shape, typename in_type::scalar_type>;
 
     using res_shape = aux::nth_shape_t<in_shape, axis()+1>;
     using op_shape = typename util::remove_cvref_t<op_t>::shape_type;

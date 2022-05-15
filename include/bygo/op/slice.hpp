@@ -1,7 +1,7 @@
 #ifndef BYGO_OP_SLICE_HPP
 #define BYGO_OP_SLICE_HPP
 
-#include <bygo/basic/basic_elem.hpp>
+#include <bygo/basic/entity.hpp>
 
 namespace bygo::op{
 
@@ -86,7 +86,7 @@ constexpr auto slice(in_t&& in, ival_t&& ival, ivals_t&&... ivals){
     using out_shape = decltype(impl::deduce_shape<in_shape>(std::make_index_sequence<sizeof...(ivals_t)>{}
         , std::make_index_sequence<in_shape::size - sizeof...(ivals_t) - 1>{}
         , std::forward<ival_t>(ival), std::forward<ivals_t>(ivals)...));
-    using out_type = bygo::basic_elem<out_shape, typename in_type::scalar_type>;
+    using out_type = bygo::basic::entity<out_shape, typename in_type::scalar_type>;
 
     out_type res{};
     impl::slice<typename out_shape::res_shape>(std::forward<in_t>(in), res

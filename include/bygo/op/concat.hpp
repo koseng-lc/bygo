@@ -1,7 +1,7 @@
 #ifndef BYGO_OP_CONCAT_HPP
 #define BYGO_OP_CONCAT_HPP
 
-#include <bygo/basic/basic_elem.hpp>
+#include <bygo/basic/entity.hpp>
 #include <bygo/prop/shape.hpp>
 
 namespace bygo::op{
@@ -55,7 +55,7 @@ constexpr auto concat(in_t&& in, op_t&& op, axis_t&& axis){
     using in_type = util::remove_cvref_t<in_t>;
     using op_type = util::remove_cvref_t<op_t>;
     using out_shape = aux::add_nth_shape_t<axis(), aux::nth_shape_dim_v<typename op_type::shape_type, axis()+1>, typename in_type::shape_type>;
-    using out_type = basic_elem<out_shape, typename in_type::scalar_type>;
+    using out_type = basic::entity<out_shape, typename in_type::scalar_type>;
 
     using Is = std::make_index_sequence<out_shape::dim>;
 
